@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIF | Acceso</title>
+    <!--Necesario para lo inconos (Password/Username)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!--Luego adaptarlo al logo correspondiente-->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+    <div class="space-container">
+        <div class="image-container">
+            <!-- Reemplaza la URL con tu imagen -->
+            <img src="{% static 'img/Gobierno.png' %}" alt="Imagen Gobierno">
+        </div>
+
+        <div class="login-container">
+            <img class="login-logo" src="{% static 'img/Tesoreria_blanco.png' %}" alt="Imagen de Tesorería">
+            <form method="post" class="login-form">
+                <h1 class="login-header">Iniciar Sesión</h1>
+                <p class="login-subtitle">Ingrese sus credenciales para acceder al sistema</p>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="errorlist">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Usuario" required
+                        autofocus>
+                    {% if form.username.errors %}
+                    <div class="errorlist">{{ form.username.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Constraseña">
+                    <img src="{% static 'img/mostrar.png' %}" alt="Mostrar contraseña" id="togglePassword">
+                    {% if form.password.errors %}
+                    <div class="errorlist">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Acceder al
+                    sistema</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="logo-container">
+        <div class="logo-space">
+            <img src="{% static 'img/Tesoreria.png' %}" alt="Imagen de Tesorería">
+            <img src="{% static 'img/Juarez.png' %}" alt="Imagen Juarez">
+            <p><span>Desarrollado por:</span>
+                <img src="{% static 'img/Dirección.png' %}" alt="Imagen Dirección">
+            </p>
+        </div>
+    </div>
+
+    <script src="{% static 'js/login.js' %}"></script>
+</body>
+
+</html>

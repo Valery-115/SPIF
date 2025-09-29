@@ -1,0 +1,959 @@
+/*Iconos https://fontawesome.com/search?f=classic&s=solid&o=r*/
+@font-face {
+    font-family: 'GOTHAM BOLD';
+    src: url('../fonts/GOTHAM BOLD.OTF') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM LIGHT';
+    src: url('../fonts/GOTHAM LIGHT.OTF') format('opentype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM BOOK';
+    src: url('../fonts/GOTHAM-BOOK.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gris: #e5e5e6;
+    --azul: #003257;
+    --guinda: #831f46;
+    --degradado: #525B68;
+    --btn: #353535;
+    --error: #d10011;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'GOTHAM BOLD', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: var(--guinda);
+}
+
+/* -------------------
+Barra lateral (Menú Izquierdo)
+------------------- */
+.sidebar {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    color: var(--btn);
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    border-bottom: 1px solid var(--guinda);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.sidebar-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--azul);
+    margin: 0;
+}
+
+.sidebar-menu {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: var(--btn);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+.sidebar-menu li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    color: var(--btn);
+    transition: color 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover i {
+    color: var(--guinda);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--guinda);
+}
+
+/* -------------------
+Botón Cerrar Sesión
+------------------- */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    color: var(--btn);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+    background-color: var(--error);
+    color: white;
+}
+
+.logout-btn i {
+    margin-right: 15px;
+}
+
+/* Submenús (1)*/
+.has-submenu>a {
+    justify-content: space-between;
+}
+
+.submenu {
+    list-style: none;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu.active {
+    max-height: 450px;
+}
+
+.submenu li a {
+    padding: 10px 25px 10px 50px;
+    font-size: 0.95em;
+    color: var(--btn);
+}
+
+.submenu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+    color: var(--btn);
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
+
+/* --------------------
+Estilos para el segundo nivel de submenú (2)
+----------------------- */
+.submenu-toggle-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.submenu-2 {
+    list-style: none;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-left: 15px;
+}
+
+.submenu-2.active {
+    max-height: 450px;
+}
+
+.submenu-2 li a {
+    padding: 8px 25px 8px 65px;
+    font-size: 0.9em;
+}
+
+.arrow-2 {
+    transition: transform 0.3s ease;
+}
+
+.arrow-2.rotated {
+    transform: rotate(90deg);
+}
+
+/* -------------------
+Componente Toggle (Pestaña)
+------------------- */
+.toggle-tab {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+    transition: left 0.3s ease;
+}
+
+.toggle-tab-btn {
+    width: 40px;
+    height: 60px;
+    background-color: var(--azul);
+    color: white;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    padding: 15px 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-tab-btn:hover {
+    background-color: var(--guinda);
+    color: white;
+    width: 45px;
+}
+
+.toggle-tab-btn i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-tab-btn.rotated i {
+    transform: rotate(180deg);
+}
+
+/* -------------------
+Menú Derecha
+------------------- */
+.right-menu {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    color: var(--btn);
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.right-menu-header {
+    padding: 25px 20px;
+    border-bottom: 1px solid var(--guinda);
+}
+
+.right-menu-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--azul);
+    text-align: center;
+}
+
+.right-menu-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: var(--gris);
+    color: var(--azul);
+    font-size: 0.95em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.menu-btn span {
+    text-align: center;
+    flex-grow: 1;
+    /* Esta propiedad es clave. Ocupa todo el espacio disponible */
+}
+
+.menu-btn:hover {
+    background-color: var(--guinda);
+    color: white;
+}
+
+.menu-btn i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    color: inherit;
+}
+
+.right-menu-footer {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid var(--guinda);
+}
+
+.logo-footer {
+    width: 50px;
+    height: auto;
+    opacity: 0.7;
+}
+
+/* -------------------
+Contenido Principal
+------------------- */
+.main-content {
+    margin-left: 250px;
+    margin-right: 250px;
+    width: calc(100% - 500px);
+    padding: 40px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin-bottom: 40px;
+}
+
+.page-title {
+    font-size: 2rem;
+    color: var(--azul);
+    font-weight: 500;
+}
+
+.user-info span {
+    color: var(--degradado);
+    font-weight: 400;
+}
+
+/* -------------------
+Botones de Contenido Principal
+------------------- */
+.container {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.header-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--gris);
+}
+
+.header-btn h1 {
+    color: var(--azul);
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--degradado);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.column-title {
+    font-size: 16px;
+    color: var(--degradado);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gris);
+    font-weight: 500;
+}
+
+.btn {
+    padding: 14px 16px;
+    border: 1px solid var(--gris);
+    border-radius: 6px;
+    border-left: 3px solid var(--azul);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: white;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    color: var(--azul);
+}
+
+.btn:hover {
+    background-color: var(--gris);
+    border-color: var(--guinda);
+    color: var(--guinda);
+}
+
+.btn:active {
+    background-color: #f1f3f5;
+}
+
+.btn i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+}
+
+a.btn {
+    text-decoration: none;
+    text-align: left;
+}
+
+a.btn:hover {
+    text-decoration: none;
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--degradado);
+    font-size: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+/* --------------------
+Estilos para el contenedor
+de Notificaiones
+----------------------- */
+#notification {
+    position: fixed;
+    /* Lo fija en la pantalla */
+    top: 0;
+    /* Empieza en la parte superior */
+    left: 50%;
+    /* Lo centra horizontalmente */
+    transform: translateX(-50%) translateY(-100%);
+    /* Mueve el elemento 50% de su ancho a la izquierda y lo oculta por completo por encima del viewport */
+    padding: 15px 25px;
+    border-radius: 0 0 10px 10px;
+    /* Bordes redondeados en la parte inferior */
+    z-index: 1000;
+    /* Asegura que esté por encima de otros elementos */
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-in-out;
+    /* Animación de 0.5 segundos para la entrada y salida */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Espacio entre el ícono y el texto */
+}
+
+/* Estado activo: cuando la notificación debe ser visible */
+#notification.show {
+    transform: translateX(-50%) translateY(0);
+    /* Lo baja a la posición visible (0) */
+}
+
+/* Estilos específicos para éxito y error */
+.notification.success {
+    background-color: #28a745;
+    /* Verde para éxito */
+}
+
+.notification.error {
+    background-color: var(--error);
+    /* Rojo para error */
+}
+
+/* -------------------
+Panel de Formularios
+------------------- */
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--azul);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--guinda);
+    padding-bottom: 10px;
+}
+
+.section-title i {
+    margin-right: 15px;
+    color: var(--guinda);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 0.9em;
+    color: var(--degradado);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group label.required::after {
+    content: '*';
+    color: var(--error);
+    margin-left: 5px;
+}
+
+.form-group label i {
+    margin-right: 8px;
+    color: var(--btn);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--gris);
+    border-radius: 4px;
+    font-size: 1em;
+    color: var(--btn);
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+/* Estilos para campos de formulario bloqueados */
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+    /* Cambia el cursos para indicar que no es editable/modificable */
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--guinda);
+    box-shadow: 0 0 5px rgba(131, 31, 70, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary {
+    background-color: var(--azul);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--guinda);
+}
+
+.btn-secondary {
+    background-color: var(--gris);
+    color: var(--btn);
+}
+
+.btn-secondary:hover {
+    background-color: #d8d8d8;
+    color: var(--guinda);
+}
+
+/* -------------------
+Contenedor de Tabla Proveedor
+------------------- */
+/* Estilos para el contenedor principal de la tabla */
+.table-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+/* Encabezado del contenedor de la tabla (título y botones) */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Contenedor de botones de acción */
+.table-actions {
+    display: flex;
+}
+
+/* Estilo de los botones de acción */
+.action-btn {
+    background-color: var(--azul);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: var(--guinda);
+}
+
+/* Contenedor para scroll horizontal */
+.table-wrapper {
+    width: 100%;
+    max-height: 34rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Estilos de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 600px;
+}
+
+table thead tr {
+    background-color: var(--guinda);
+    color: #fff;
+    text-align: left;
+    font-weight: 600;
+}
+
+table th,
+table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--degradado);
+}
+
+table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: var(--gris);
+}
+
+table tbody tr:hover {
+    background-color: var(--degradado);
+    color: white;
+}
+
+/* Estilo para los mensajes de no datos */
+.no-data-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* ---------------------------------
+Contenedor de búsqueda Proveedor
+---------------------------------- */
+/* Estilos para el buscador */
+.search-container {
+    display: flex;
+    align-items: center;
+    width: 280px;
+    /* Ancho ajustable */
+    border: 1px solid var(--gris);
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.search-container:hover {
+    border-color: var(--guinda);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    flex-grow: 1;
+    /* Permite que el input ocupe el espacio disponible */
+    border: none;
+    background: transparent;
+    padding: 8px 10px;
+    font-size: 14px;
+    color: var(--btn);
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+/* Ocultar el icono de la lupa por defecto si está en el input */
+.search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+.search-icon {
+    color: var(--degradado);
+    margin-left: 10px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.search-container:hover .search-icon {
+    color: var(--guinda);
+}
+
+/* -------------------
+Contenedor de imágenes
+------------------- */
+.dgic-container {
+    background-color: var(--gris);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    margin-bottom: 1rem;
+}
+
+.dgic-container img {
+    height: 4rem;
+    object-fit: contain;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dgic-container img:hover {
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+/* -------------------
+Crecimiento del Contenedor Principal
+------------------- */
+body.collapsed .sidebar {
+    transform: translateX(-100%);
+}
+
+body.collapsed .main-content {
+    margin-left: 0;
+    width: calc(100% - 250px);
+}
+
+body.collapsed .toggle-tab {
+    left: 0;
+}
+
+/* Ventana para Impresión */
+@media print {
+
+    .toggle-tab,
+    .sidebar,
+    .right-menu,
+    .btn-container,
+    .proveedores-panel {
+        display: none;
+    }
+
+    @page {
+        /* Establece un margen de 1 cm para todos los lados de la página */
+        margin: 2cm;
+    }
+
+    .main-content {
+        transform: scale(0.9);
+        transform-origin: top center;
+        width: 100% !important;
+        margin-left: 0 !important;
+        /* Elimina cualquier margen izquierdo que se usó para el sidebar. */
+        box-sizing: border-box;
+        /* Incluye el padding y el border en el cálculo del ancho */
+    }
+}
+
+
+/* Nuevo y corregido Media Query */
+@media (max-width: 768px) {
+
+    /* Ocultar el menú lateral izquierdo por defecto en móviles */
+    body {
+        /* Fuerza al body a estar en modo colapsado en pantallas pequeñas */
+        display: block;
+        padding-top: 20px;
+    }
+
+    body.collapsed .sidebar {
+        transform: translateX(-100%);
+        /* Aseguramos que se oculte correctamente */
+    }
+
+    body:not(.collapsed) .sidebar {
+        transform: translateX(0);
+    }
+
+    /* El contenedor principal debe expandirse para ocupar todo el espacio */
+    .main-content {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* Posicionar el menú derecho para que esté visible en móviles */
+    .right-menu {
+        position: fixed;
+        /* Mantenemos su posición fija */
+        top: 0;
+        right: 0;
+        width: 250px;
+        /* O el ancho que desees */
+        z-index: 999;
+        /* Puedes agregar un transform para ocultarlo si quieres */
+    }
+
+    /* Adaptar el botón de la pestaña */
+    .toggle-tab {
+        top: 1%;
+        transform: none;
+    }
+
+    .toggle-tab-btn {
+        width: 20px;
+        height: 20px;
+    }
+
+    .toggle-tab-btn:hover {
+        width: 25px;
+    }
+
+    /* Otros ajustes de diseño */
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .user-info {
+        text-align: center;
+        width: 100%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+
+    .dgic-container img {
+        height: 3rem;
+    }
+}
