@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['10.236.62.44']
 
-CSRF_TRUSTED_ORIGINS = ['10.236.62.44', 'http://10.236.62.44']
+CSRF_TRUSTED_ORIGINS = ['http://10.236.62.44']
 
 
 # Application definition
