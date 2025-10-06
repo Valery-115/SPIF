@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Vale#998z',
+        'HOST': 'spif_pg_db_v14',
+        'PORT': '5434',
     }
 }
 
