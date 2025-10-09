@@ -20,4 +20,4 @@ services:
       - spif_vol_db_data:/var/lib/postgresql/data # Persistencia de datos
 
 volumes:
-  spif_vol_data: # Define el volumen para la BD
+  spif_vol_db_data: # Define el volumen para la BD
