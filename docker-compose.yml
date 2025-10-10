@@ -3,21 +3,35 @@
 #version: '' # Especifica  la versión del formato de archivos Compose
 
 services:
-  #Servicio 1: El backend o la App Web
-  web:
-    build: . #  Le dices a Docker que busque un Dockerfile en este mismo directorio 
-    ports:
-      - "5433:5432" # Mapea el puerto 5432 del contenedor al puerto 5434 de tu servidor
-
-    # Service 2: La BD
+  #Servicio 1: La BD
   db:
+  # 1. IMAGEN: Usar la iIMG oficial ligera de PostgreSQL 14
     image: postgres:14-alpine # Usa una imagen preconstruida de Docker Hub
+
+  # 2. NOMBRE: Nombre predecible al conyenedor
+    container_name: spif_pg_db_v14
+
+  # 3. REINICIO: Asegurar que se reinicie si el servidor se apaga
+    restart: always
+
+  # 4. CREDENCIALES
     environment:
-      POSTGRES_DB: spif_bd
+      POSTGRES_DB: postgres
       POSTGRES_USER: spif
-      POSTGRES_PASSWORD: Vale#98z
+      POSTGRES_PASSWORD: Vale#98z # ¡Asegúrate de que coincida con tu setting.py!
+
+  # 5. PUERTOS: Mapeo Externo:Interno 
+    ports:
+      - "5433:5432"
     volumes:
       - spif_vol_db_data:/var/lib/postgresql/data # Persistencia de datos
+
+  # El chequeo de vida
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U spif"] # Usar el usuario que definimos
+    interval: 5s
+    timeout: 5s
+    retries: 5
 
 volumes:
   spif_vol_db_data: # Define el volumen para la BD
