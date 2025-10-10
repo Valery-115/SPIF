@@ -1,6 +1,6 @@
 #docker-compose.yml
 
-#version: '' # Especifica  la versión del formato de archivos Compose
+version: '3.8' # Especifica  la versión del formato de archivos Compose
 
 services:
   #Servicio 1: La BD
