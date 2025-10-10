@@ -9,7 +9,7 @@ services:
     image: postgres:14-alpine # Usa una imagen preconstruida de Docker Hub
 
   # 2. NOMBRE: Nombre predecible al conyenedor
-    container_name: spif_pg_db_v14
+    container_name: spif_pg-v14
 
   # 3. REINICIO: Asegurar que se reinicie si el servidor se apaga
     restart: always
