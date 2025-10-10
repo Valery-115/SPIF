@@ -86,7 +86,7 @@ DATABASES = {
         'USER': 'spif',
         'PASSWORD': 'Vale#98z',
         'HOST': '10.236.62.44',
-        'PORT': '5433',
+        'PORT': '5435',
     }
 }
 
