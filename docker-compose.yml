@@ -30,9 +30,9 @@ services:
 
   # 7. CHEQUEO DE SALUD: Verifica que el servidor Postgres esté listo antes de ser usado.
   healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U spif"]
+      test: ["CMD-SHELL", "pg_isready", "-U", "spif"]
       interval: 5s
-      timeout: 5s
+      #timeout: 5s
       retries: 5
 
   # 8. DEFINICIÓN DE VOLUMEN: El volumen real que persisten los datos en el servidor.
