@@ -28,7 +28,7 @@ services:
     healthcheck: # <-- Alinear con 'image', 'ports', 'volumes', etc.
       test: ["CMD-SHELL", "pg_isready -U spif"] # <-- Cuatro espacios (anidado bajo healthcheck)
       interval: 5s
-      timeout: 110s
+      timeout: 5s
       retries: 5
 
 # 8. DEFINICIÓN DE VOLUMEN: El volumen real que persisten los datos en el servidor.
