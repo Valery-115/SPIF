@@ -13,8 +13,8 @@ services:
     # 4. CREDENCIALES
     environment:
       POSTGRES_DB: spif
-      POSTGRES_USER: Valeria
-      POSTGRES_PASSWORD: Vale#98z
+      POSTGRES_USER: spif_user
+      POSTGRES_PASSWORD: temporal
 
     # 5. PUERTOS: Mapeo Externo:Interno (el puerto 5435 es el que debe abrir)
     ports:
