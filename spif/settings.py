@@ -83,7 +83,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'spif',
-        'USER': 'Valeria',
+        'USER': 'spif_user',
         'PASSWORD': 'Vale#98z',
         'HOST': '10.236.62.44',
         'PORT': '5435',
