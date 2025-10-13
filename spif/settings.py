@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'spif',
         'USER': 'Valeria',
         'PASSWORD': 'Vale#98z',
         'HOST': '10.236.62.44',
