@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'spif',
         'PASSWORD': 'Vale#98z',
-        'HOST': 'spif_pg-v14',
+        'HOST': '10.236.62.44',
         'PORT': '5435',
     }
 }
