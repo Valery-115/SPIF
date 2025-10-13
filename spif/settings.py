@@ -84,9 +84,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'spif',
         'USER': 'spif_user',
-        'PASSWORD': 'Vale#98z',
-        'HOST': '127.0.0.1',
-        'PORT': '5433',
+        'PASSWORD': 'temporal',
+        'HOST': '10.236.62.44',
+        'PORT': '5434',
     }
 }
 
