@@ -22,7 +22,7 @@ services:
 
     # 6 PERSISTENCIAS DE DATOS: Usa el volumen definido abajo
     volumes:
-      - spif_vol_db_data:/var/lib/postgresql/data # Persistencia de datos
+      - vol_db_data:/var/lib/postgresql/data # Persistencia de datos
 
     # 7. CHEQUEO DE SALUD: Verifica que el servidor Postgres esté listo
     healthcheck: # <-- Alinear con 'image', 'ports', 'volumes', etc.
@@ -33,4 +33,4 @@ services:
 
 # 8. DEFINICIÓN DE VOLUMEN: El volumen real que persisten los datos en el servidor.
 volumes:
-  spif_vol_db_data: # Define el volumen para la BD
+  vol_db_data: # Define el volumen para la BD
