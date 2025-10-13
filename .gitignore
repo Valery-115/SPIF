@@ -28,6 +28,8 @@ db.sqlite3
 # Archivo de base de datos local
 /media/               
 # Archivos subidos por los usuarios
+docker-compose.yml
+# Archivo de Docker para la BD
 
 # --------------------
 # 4. Archivos de Django y SO
