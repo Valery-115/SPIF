@@ -18,7 +18,7 @@ services:
 
     # 5. PUERTOS: Mapeo Externo:Interno (el puerto 5435 es el que debe abrir)
     ports:
-      - "5435:5432"
+      - "5434:5432"
 
     # 6 PERSISTENCIAS DE DATOS: Usa el volumen definido abajo
     volumes:
