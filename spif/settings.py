@@ -27,7 +27,7 @@ SECRET_KEY = ')$!2i4a9#01ek#n!0ya+$)jo-=s#*$v=v5kr-xd24r5lzo44hi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.236.62.44']
+ALLOWED_HOSTS = ['10.236.62.44', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['http://10.236.62.44']
 
@@ -79,14 +79,22 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+#BD del Servidor
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'spif',
+#        'USER': 'spif_user',
+#        'PASSWORD': 'temporal',
+#        'HOST': '10.236.62.44',
+#        'PORT': '5434',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spif',
-        'USER': 'spif_user',
-        'PASSWORD': 'temporal',
-        'HOST': '10.236.62.44',
-        'PORT': '5434',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
