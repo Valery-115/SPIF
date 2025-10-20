@@ -53,6 +53,8 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
+    /* Elimina el Scroll del Body */
+    overflow-y: hidden;
 }
 
 /*
@@ -64,11 +66,11 @@ body {
 /* ------------------- Barra lateral (Menú Izquierdo) ------------------- */
 .sidebar {
     width: 250px;
-    height: 100%;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    /* meemo white*/
     background-color: var(--guinda);
     color: var(--btn);
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
@@ -80,7 +82,7 @@ body {
 
 .sidebar-header {
     padding: 25px 20px;
-    /* meemo --guinda */
+    height: 125px;
     border-bottom: 1px solid white;
     display: flex;
     justify-content: center;
@@ -91,7 +93,6 @@ body {
 .sidebar-header h2 {
     font-size: 1.4rem;
     font-weight: 600;
-    /* meemo --azul */
     color: white;
     margin: 0;
 }
@@ -137,6 +138,8 @@ body {
     padding: 20px;
     /* meemo white */
     border-top: 1px solid white;
+    height: 140px;
+    align-content: center;
 }
 
 /* -------------------
@@ -239,7 +242,8 @@ Botón Cerrar Sesión
 /* ------------------- Menú Derecha ------------------- */
 .right-menu {
     width: 250px;
-    height: 100%;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
     position: fixed;
     top: 0;
     right: 0;
@@ -252,7 +256,9 @@ Botón Cerrar Sesión
 
 .right-menu-header {
     padding: 25px 20px;
+    height: 125.5px;
     border-bottom: 1px solid var(--guinda);
+    align-content: center;
 }
 
 .right-menu-header h2 {
@@ -307,10 +313,12 @@ Botón Cerrar Sesión
     padding: 15px;
     text-align: center;
     border-top: 1px solid var(--guinda);
+    height: 140px;
+    align-content: center;
 }
 
 .logo-footer {
-    width: 50px;
+    width: 8.5rem;
     height: auto;
     opacity: 0.7;
 }
@@ -320,9 +328,16 @@ Botón Cerrar Sesión
     margin-left: 250px;
     margin-right: 250px;
     width: calc(100% - 500px);
-    padding: 40px;
+    padding: 15px 40px 0;
+    /* Fija la altura del contenedor principal */
     min-height: 100vh;
     transition: margin-left 0.3s ease, width 0.3s ease;
+    /* Ocupa toda la altura de la ventana */
+    height: 100vh;
+    overflow-y: hidden;
+    /* Permite que los hijos (.header, .container, .dgic-container) se distribuyan verticalmente */
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -330,12 +345,12 @@ Botón Cerrar Sesión
     justify-content: space-between;
     align-items: center;
     padding: 25px 40px;
-    /* Memo */
     background-color: rgba(255, 255, 255, 0.555);
-    /* Memo */
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border-radius: 12px;
-    margin-bottom: 40px;
+    margin: 10px 0 30px;
+
+    flex-shrink: 0;
 }
 
 .page-title {
@@ -358,12 +373,17 @@ Botón Cerrar Sesión
 
 /* ------------------- Contenedores y Títulos ------------------- */
 .container {
-    /* Memo background-color: #f8f8f8;*/
     background-color: rgba(255, 255, 255, 0.692);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     padding: 30px;
     border: 1px solid #e0e0e0;
+    /* Ocupa el espacio vertical restante en el 'main-content'*/
+    flex-grow: 1;
+    /* Aplica el Scroll solo al contenido del formulario */
+    overflow-y: auto;
+    /* Asegura que no se expanda más allá de lo permitido por 'flex-grow' */
+    min-height: 0;
 }
 
 .header-btn {
@@ -682,9 +702,7 @@ table tbody tr:hover {
 /* ------------------- Contenedor de Imágenes ------------------- */
 /* Nuevo diseño para el contenedor de imágenes */
 .dgic-container {
-    /* Memo */
     background-color: rgba(255, 255, 255, 0.555);
-    /* Memo */
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     /* X, Y, Capacidad, RGB, Opacidad*/
     display: flex;
@@ -700,6 +718,8 @@ table tbody tr:hover {
     margin-top: 30px;
     /* Espacio superior para separarlo del contenido de arriba */
     margin-bottom: 1rem;
+    /* Espacio fijo */
+    flex-shrink: 0;
 }
 
 .dgic-container p {
@@ -720,9 +740,8 @@ table tbody tr:hover {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.dgic-container img:hover {
-    transform: scale(1.05);
-    opacity: 1;
+.dgic-container .big {
+    height: 3rem;
 }
 
 /* ------------------- Notificaciones ------------------- */

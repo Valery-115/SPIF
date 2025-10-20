@@ -5,11 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captura Contratos $426</title>
+    <title>SPIF | Captura Contratos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!--Necesario para lo inconos-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{% static 'img/Logo.png' %}">
     <link rel="stylesheet" href="{% static 'css/captura_contrato.css' %}">
@@ -123,11 +122,11 @@
             <h2>Funciones</h2>
         </div>
         <div class="right-menu-content">
-            <button class="menu-btn">
-                <i class="fas fa-plus"></i><span>Agregar</span>
+            <button type="button" class="menu-btn" id="btnAgregar">
+                <i class="fas fa-plus"></i><span>Crear</span>
             </button>
-            <button class="menu-btn" id="btnGrabar">
-                <i class="fas fa-layer-group"></i><span>Grabar</span></button>
+            <button class="menu-btn" id="btnActualizar">
+                <i class="fas fa-layer-group"></i><span>Actualiza(quitar la función de Guardar)</span></button>
             </button>
             <button class="menu-btn" id="btnImprimir">
                 <i class="fas fa-print"></i><span>Imprimir</span>
@@ -143,7 +142,7 @@
             </a>
         </div>
         <div class="right-menu-footer">
-            <img src="{% static 'img/Logo.png' %}" alt="Logo SPIF" class="logo-footer">
+            <img src="{% static 'img/Gobierno.png' %}" alt="Logo SPIF" class="logo-footer">
         </div>
     </div>
 
@@ -162,105 +161,172 @@
         <div class="container">
             <div class="header-btn">
                 <h1>Sistema de Capturación de Contratos</h1>
-                <p class="subtitle">--- Pensar en un texto para indicarle al usuario que debe hacer. ---</p>
+            </div>
+
+            <div class="wizard-container">
+                <div class="wizard-header">
+                    <p class="wizard-subtitle">Siga los siguientes pasos para realizar su operación.</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+
+                    <div class="step-indicators">
+                        <div class="step active" id="step-1">
+                            <i class="fas fa-user"></i>
+                            <span class="step-label">Elección de
+                                <br>Función</span>
+                        </div>
+                        <div class="step" id="step-2">
+                            <i class="fas fa-cog"></i>
+                            <span class="step-label">Llenado de Formulario</span>
+                        </div>
+                        <div class="step" id="step-3">
+                            <i class="fas fa-check"></i>
+                            <span class="step-label">Guardado</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="panel-container">
-                <section class="form-section">
-                    <h2 class="section-title"><i class="fas fa-pen-to-square"></i> Datos del Contrato</h2>
-                    <form id="contractForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="contractNumber" class="required"><i class="fas fa-hashtag"></i> Núm.
-                                    Contrato</label>
-                                <input type="text" id="contractNumber" required>
+                <div class="wizard-body">
+                    <section class="form-section">
+                        <h2 class="section-title"><i class="fas fa-pen-to-square"></i> Datos del Contrato</h2>
+                        <form id="contractForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="contractNumber" class="required"><i class="fas fa-hashtag"></i> Núm.
+                                        Contrato</label>
+                                    <input type="text" id="contractNumber" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="providerId" class="required"><i class="fas fa-id-card"></i> Prov
+                                        ID</label>
+                                    <input type="text" id="providerId" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="provider" class="required"><i class="fas fa-building"></i>
+                                        Proveedor</label>
+                                    <input type="text" id="provider" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="description" class="required"><i class="fas fa-file-alt"></i>
+                                        Descripción</label>
+                                    <textarea id="description" rows="3" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="initialAmount" class="required"><i class="fas fa-dollar-sign"></i> Monto
+                                        Ini</label>
+                                    <input type="number" id="initialAmount" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount" class="required"><i class="fas fa-money-bill-wave"></i>
+                                        Importe</label>
+                                    <input type="number" id="amount" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fund" class="required"><i class="fas fa-piggy-bank"></i> Fondo</label>
+                                    <select id="fund" required>
+                                        <option value="">Seleccione un Fondo</option>
+                                        <option value="MHA">MHA</option>
+                                        <option value="Genshin">Genshin Impact</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contractDate" class="required"><i class="fas fa-calendar"></i> Fecha
+                                        Contrato</label>
+                                    <input type="date" id="contractDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate"><i class="fas fa-calendar-times"></i> Fecha Terminación</label>
+                                    <input type="date" id="endDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="status" class="required"><i class="fas fa-toggle-on"></i> Estado</label>
+                                    <select id="status" required>
+                                        <option value="">Seleccione un Estado</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Terminado">Terminado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                        <option value="En proceso">En proceso</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="label" class="required"><i class="fas fa-keyboard"></i> Etiqueta</label>
+                                    <input type="number" id="label" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type" class="required"><i class="fas fa-tag"></i> Tipo</label>
+                                    <select id="type" required>
+                                        <option value="">Seleccione un Tipo</option>
+                                        <option value="Servicio">Servicio</option>
+                                        <option value="Producto">Producto</option>
+                                        <option value="Licencia">Licencia</option>
+                                        <option value="Mantenimiento">Mantenimiento</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type1" class="required"><i class="fas fa-keyboard"></i> Tipo 1</label>
+                                    <select id="type1">
+                                        <option value="">Seleccione un Tipo</option>
+                                        <option value="Servicio">Servicio</option>
+                                        <option value="Producto">Producto</option>
+                                        <option value="Licencia">Licencia</option>
+                                        <option value="Mantenimiento">Mantenimiento</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type2" class="required"><i class="fas fa-keyboard"></i> Tipo 2</label>
+                                    <select type="text" id="type2">
+                                        <option value="">Seleccione un Tipo</option>
+                                        <option value="Servicio">Servicio</option>
+                                        <option value="Producto">Producto</option>
+                                        <option value="Licencia">Licencia</option>
+                                        <option value="Mantenimiento">Mantenimiento</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="providerId" class="required"><i class="fas fa-id-card"></i> Prov ID</label>
-                                <input type="text" id="providerId" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="provider" class="required"><i class="fas fa-building"></i> Proveedor</label>
-                                <input type="text" id="provider" required>
-                            </div>
-                            <div class="form-group full-width">
-                                <label for="description" class="required"><i class="fas fa-file-alt"></i>
-                                    Descripción</label>
-                                <textarea id="description" rows="3" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="initialAmount" class="required"><i class="fas fa-dollar-sign"></i> Monto
-                                    Ini</label>
-                                <input type="number" id="initialAmount" min="0" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="amount" class="required"><i class="fas fa-money-bill-wave"></i>
-                                    Importe</label>
-                                <input type="number" id="amount" min="0" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="fund" class="required"><i class="fas fa-piggy-bank"></i> Fondo</label>
-                                <select id="fund" required>
-                                    <option value="">Seleccione un Fondo</option>
-                                    <option value="MHA">MHA</option>
-                                    <option value="Genshin">Genshin Impact</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="contractDate" class="required"><i class="fas fa-calendar"></i> Fecha
-                                    Contrato</label>
-                                <input type="date" id="contractDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endDate"><i class="fas fa-calendar-times"></i> Fecha Terminación</label>
-                                <input type="date" id="endDate">
-                            </div>
-                            <div class="form-group">
-                                <label for="status" class="required"><i class="fas fa-toggle-on"></i> Estado</label>
-                                <select id="status" required>
-                                    <option value="">Seleccione un Estado</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Terminado">Terminado</option>
-                                    <option value="Cancelado">Cancelado</option>
-                                    <option value="En proceso">En proceso</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="label"><i class="fas fa-keyboard"></i> Etiqueta</label>
-                                <input type="text" id="label">
-                            </div>
-                            <div class="form-group">
-                                <label for="type" class="required"><i class="fas fa-tag"></i> Tipo</label>
-                                <select id="type" required>
-                                    <option value="">Seleccione un Tipo</option>
-                                    <option value="Servicio">Servicio</option>
-                                    <option value="Producto">Producto</option>
-                                    <option value="Licencia">Licencia</option>
-                                    <option value="Mantenimiento">Mantenimiento</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="type1"><i class="fas fa-keyboard"></i> Tipo 1</label>
-                                <input type="text" id="type1">
-                            </div>
-                            <div class="form-group">
-                                <label for="type2"><i class="fas fa-keyboard"></i> Tipo 2</label>
-                                <input type="text" id="type2">
-                            </div>
-                        </div>
-                        <div class="btn-container">
-                            <button type="submit" id="btn-primary" class="btn-primary"><i class="fas fa-save"></i>
-                                Guardar
-                                Contrato</button>
-                            <button type="reset" class="btn-secondary"><i class="fas fa-eraser"></i> Limpiar
-                                Campos</button>
-                        </div>
-                    </form>
-                </section>
 
-                <!--Tabla dinamica de Proveedores-->
-                <div class="proveedores-panel">
-                    <div class="container-proveedor" id="proveedoresTableContainer"></div>
+                            <div class="btn-container">
+                                <button type="submit" id="btnGuardar" class="btn-guardar"><i class="fas fa-save"></i>
+                                    Guardar
+                                    Contrato</button>
+                                <button type="reset" id="btnLimpiar" class="btn-limpiar"><i class="fas fa-eraser"></i>
+                                    Limpiar
+                                    Campos</button>
+                                <!--WIZARD-->
+                                <button style="display: none;" class="btn btn-prev" onclick="prevStep('dark')">
+                                    <i class="fas fa-arrow-left"></i> Anterior
+                                </button>
+                                <button style="display: none;" class="btn btn-next" onclick="nextStep('dark')">
+                                    Siguiente <i class="fas fa-arrow-right"></i>
+                                </button>
+                                <button style="display: none;" class="btn btn-submit" onclick="submitForm('dark')">
+                                    <i class="fas fa-check"></i> Completar
+                                </button>
+                                <!--WIZARD-->
+                            </div>
+                        </form>
+                    </section>
+
+                    <!--Tabla dinamica de Proveedores-->
+                    <div id="proveedorModal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="section-title"><i class="fas fa-truck"></i> Listado de Proveedores</h2>
+                                <span class="close-btn">&times;</span>
+                            </div>
+                            <p class="modal-txt">Haga clic en el proveedor deseado para que sus datos se llenen
+                                automáticamente en el formulario.</p>
+                            <!--class="proveedores-panel"-->
+                            <div class="modal-body">
+                                <div class="container-proveedor" id="proveedoresTableContainer"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -271,8 +337,11 @@
 
         <!--Contenedor de imágenes-->
         <div class="dgic-container">
-            <img src="{% static 'img/Juarez.png' %}" alt="Juárez Conectado">
-            <img src="{% static 'img/Dirección.png' %}" alt="DGIC">
+            <img src="{% static 'img/Tesoreria.png' %}" alt="Tesorería">
+            <img class="big" src="{% static 'img/Juarez.png' %}" alt="Juázres Conectado">
+            <p><span>Desarrollado por:</span>
+                <img src="{% static 'img/Dirección.png' %}" alt="DGIC">
+            </p>
         </div>
         <br>
     </div>

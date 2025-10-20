@@ -1,25 +1,33 @@
+/*
+ * ============================================
+ * Estilos Generales y Variables
+ * ============================================
+ */
+
 /*Iconos https://fontawesome.com/search?f=classic&s=solid&o=r*/
+/* ------------------- Fuentes ------------------- */
 @font-face {
     font-family: 'GOTHAM BOLD';
-    src: url('../fonts/GOTHAM BOLD.OTF') format('opentype');
+    src: url('/static/fonts/GOTHAM BOLD.OTF') format('opentype');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'GOTHAM LIGHT';
-    src: url('../fonts/GOTHAM LIGHT.OTF') format('opentype');
+    src: url('/static/fonts/GOTHAM LIGHT.OTF') format('opentype');
     font-weight: lighter;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'GOTHAM BOOK';
-    src: url('../fonts/GOTHAM-BOOK.OTF') format('opentype');
+    src: url('/static/fonts/GOTHAM-BOOK.OTF') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 
+/* ------------------- Variables de Color ------------------- */
 :root {
     --gris: #e5e5e6;
     --azul: #003257;
@@ -29,6 +37,7 @@
     --error: #d10011;
 }
 
+/* ------------------- Estilos del Cuerpo y Reset CSS ------------------- */
 * {
     margin: 0;
     padding: 0;
@@ -38,22 +47,33 @@
 
 body {
     display: flex;
-    height: 100vh;
-    background-color: var(--guinda);
+    min-height: 100vh;
+    background-image: url('/static/img/Fondo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    /* Elimina el Scroll del Body */
+    overflow-y: hidden;
 }
 
-/* -------------------
-Barra lateral (Menú Izquierdo)
-------------------- */
+/*
+ * ============================================
+ * Estilos de Componentes Principales
+ * ============================================
+ */
+
+/* ------------------- Barra lateral (Menú Izquierdo) ------------------- */
 .sidebar {
     width: 250px;
-    height: 100%;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    background-color: white;
+    background-color: var(--guinda);
     color: var(--btn);
-    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
@@ -62,7 +82,8 @@ Barra lateral (Menú Izquierdo)
 
 .sidebar-header {
     padding: 25px 20px;
-    border-bottom: 1px solid var(--guinda);
+    height: 125px;
+    border-bottom: 1px solid white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,7 +93,7 @@ Barra lateral (Menú Izquierdo)
 .sidebar-header h2 {
     font-size: 1.4rem;
     font-weight: 600;
-    color: var(--azul);
+    color: white;
     margin: 0;
 }
 
@@ -89,7 +110,8 @@ Barra lateral (Menú Izquierdo)
     display: flex;
     align-items: center;
     padding: 15px 25px;
-    color: var(--btn);
+    /* meemo --btn */
+    color: var(--gris);
     text-decoration: none;
     transition: all 0.2s ease-in-out;
 }
@@ -103,7 +125,8 @@ Barra lateral (Menú Izquierdo)
     margin-right: 15px;
     width: 20px;
     text-align: center;
-    color: var(--btn);
+    /* meemo --btn */
+    color: var(--gris);
     transition: color 0.2s ease-in-out;
 }
 
@@ -113,7 +136,10 @@ Barra lateral (Menú Izquierdo)
 
 .sidebar-footer {
     padding: 20px;
-    border-top: 1px solid var(--guinda);
+    /* meemo white */
+    border-top: 1px solid white;
+    height: 140px;
+    align-content: center;
 }
 
 /* -------------------
@@ -122,7 +148,8 @@ Botón Cerrar Sesión
 .logout-btn {
     display: flex;
     align-items: center;
-    color: var(--btn);
+    /* meemo --btn*/
+    color: var(--gris);
     text-decoration: none;
     padding: 12px 15px;
     border-radius: 6px;
@@ -138,14 +165,15 @@ Botón Cerrar Sesión
     margin-right: 15px;
 }
 
-/* Submenús (1)*/
+/* ------------------- Submenús ------------------- */
 .has-submenu>a {
     justify-content: space-between;
 }
 
 .submenu {
     list-style: none;
-    background-color: white;
+    /* meemo white*/
+    background-color: var(--guinda);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -158,7 +186,8 @@ Botón Cerrar Sesión
 .submenu li a {
     padding: 10px 25px 10px 50px;
     font-size: 0.95em;
-    color: var(--btn);
+    /* meemo --btn*/
+    color: var(--gris);
 }
 
 .submenu li a:hover {
@@ -175,9 +204,7 @@ Botón Cerrar Sesión
     transform: rotate(180deg);
 }
 
-/* --------------------
-Estilos para el segundo nivel de submenú (2)
------------------------ */
+/* Segundo nivel de submenú */
 .submenu-toggle-2 {
     display: flex;
     justify-content: space-between;
@@ -187,7 +214,8 @@ Estilos para el segundo nivel de submenú (2)
 
 .submenu-2 {
     list-style: none;
-    background-color: white;
+    /* meemo white*/
+    background-color: var(--guinda);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -211,55 +239,11 @@ Estilos para el segundo nivel de submenú (2)
     transform: rotate(90deg);
 }
 
-/* -------------------
-Componente Toggle (Pestaña)
-------------------- */
-.toggle-tab {
-    position: fixed;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1001;
-    transition: left 0.3s ease;
-}
-
-.toggle-tab-btn {
-    width: 40px;
-    height: 60px;
-    background-color: var(--azul);
-    color: white;
-    border: none;
-    border-radius: 0 8px 8px 0;
-    padding: 15px 10px;
-    cursor: pointer;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.toggle-tab-btn:hover {
-    background-color: var(--guinda);
-    color: white;
-    width: 45px;
-}
-
-.toggle-tab-btn i {
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
-
-.toggle-tab-btn.rotated i {
-    transform: rotate(180deg);
-}
-
-/* -------------------
-Menú Derecha
-------------------- */
+/* ------------------- Menú Derecha ------------------- */
 .right-menu {
     width: 250px;
-    height: 100%;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
     position: fixed;
     top: 0;
     right: 0;
@@ -272,7 +256,9 @@ Menú Derecha
 
 .right-menu-header {
     padding: 25px 20px;
+    height: 125.5px;
     border-bottom: 1px solid var(--guinda);
+    align-content: center;
 }
 
 .right-menu-header h2 {
@@ -309,7 +295,6 @@ Menú Derecha
 .menu-btn span {
     text-align: center;
     flex-grow: 1;
-    /* Esta propiedad es clave. Ocupa todo el espacio disponible */
 }
 
 .menu-btn:hover {
@@ -328,24 +313,31 @@ Menú Derecha
     padding: 15px;
     text-align: center;
     border-top: 1px solid var(--guinda);
+    height: 140px;
+    align-content: center;
 }
 
 .logo-footer {
-    width: 50px;
+    width: 8.5rem;
     height: auto;
     opacity: 0.7;
 }
 
-/* -------------------
-Contenido Principal
-------------------- */
+/* ------------------- Contenido Principal ------------------- */
 .main-content {
     margin-left: 250px;
     margin-right: 250px;
     width: calc(100% - 500px);
-    padding: 40px;
+    padding: 15px 40px 0;
+    /* Fija la altura del contenedor principal */
     min-height: 100vh;
     transition: margin-left 0.3s ease, width 0.3s ease;
+    /* Ocupa toda la altura de la ventana */
+    height: 100vh;
+    overflow-y: hidden;
+    /* Permite que los hijos (.header, .container, .dgic-container) se distribuyan verticalmente */
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -353,10 +345,12 @@ Contenido Principal
     justify-content: space-between;
     align-items: center;
     padding: 25px 40px;
-    background-color: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    background-color: rgba(255, 255, 255, 0.555);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border-radius: 12px;
-    margin-bottom: 40px;
+    margin: 10px 0 30px;
+
+    flex-shrink: 0;
 }
 
 .page-title {
@@ -366,27 +360,38 @@ Contenido Principal
 }
 
 .user-info span {
-    color: var(--degradado);
+    font-size: 1rem;
+    color: var(--guinda);
     font-weight: 400;
 }
 
-/* -------------------
-Botones de Contenido Principal
-------------------- */
+/*
+ * ============================================
+ * Estilos de Componentes Secundarios
+ * ============================================
+ */
+
+/* ------------------- Contenedores y Títulos ------------------- */
 .container {
-    background-color: #f8f8f8;
+    background-color: rgba(255, 255, 255, 0.692);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     padding: 30px;
     border: 1px solid #e0e0e0;
+    /* Ocupa el espacio vertical restante en el 'main-content'*/
+    flex-grow: 1;
+    /* Aplica el Scroll solo al contenido del formulario */
+    overflow-y: auto;
+    /* Asegura que no se expanda más allá de lo permitido por 'flex-grow' */
+    min-height: 0;
 }
 
 .header-btn {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 25px 40px;
-    background-color: white;
+    background-color: #f8f8f8;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     border-radius: 12px;
     margin-bottom: 30px;
@@ -394,145 +399,11 @@ Botones de Contenido Principal
 }
 
 .header-btn h1 {
+    text-align: center;
     color: var(--azul);
     font-weight: 600;
     font-size: 24px;
     margin-bottom: 8px;
-}
-
-.subtitle {
-    color: var(--degradado);
-    font-size: 14px;
-    font-weight: 400;
-}
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-}
-
-.column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.column-title {
-    font-size: 16px;
-    color: var(--degradado);
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--gris);
-    font-weight: 500;
-}
-
-.btn {
-    padding: 14px 16px;
-    border: 1px solid var(--gris);
-    border-radius: 6px;
-    border-left: 3px solid var(--azul);
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    background-color: white;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    color: var(--azul);
-}
-
-.btn:hover {
-    background-color: var(--gris);
-    border-color: var(--guinda);
-    color: var(--guinda);
-}
-
-.btn:active {
-    background-color: #f1f3f5;
-}
-
-.btn i {
-    margin-right: 12px;
-    font-size: 16px;
-    width: 24px;
-    text-align: center;
-}
-
-a.btn {
-    text-decoration: none;
-    text-align: left;
-}
-
-a.btn:hover {
-    text-decoration: none;
-}
-
-.footer {
-    margin-top: 30px;
-    text-align: center;
-    color: var(--degradado);
-    font-size: 12px;
-    padding-top: 20px;
-    border-top: 1px solid var(--gris);
-}
-
-/* --------------------
-Estilos para el contenedor
-de Notificaiones
------------------------ */
-#notification {
-    position: fixed;
-    /* Lo fija en la pantalla */
-    top: 0;
-    /* Empieza en la parte superior */
-    left: 50%;
-    /* Lo centra horizontalmente */
-    transform: translateX(-50%) translateY(-100%);
-    /* Mueve el elemento 50% de su ancho a la izquierda y lo oculta por completo por encima del viewport */
-    padding: 15px 25px;
-    border-radius: 0 0 10px 10px;
-    /* Bordes redondeados en la parte inferior */
-    z-index: 1000;
-    /* Asegura que esté por encima de otros elementos */
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.5s ease-in-out;
-    /* Animación de 0.5 segundos para la entrada y salida */
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    /* Espacio entre el ícono y el texto */
-}
-
-/* Estado activo: cuando la notificación debe ser visible */
-#notification.show {
-    transform: translateX(-50%) translateY(0);
-    /* Lo baja a la posición visible (0) */
-}
-
-/* Estilos específicos para éxito y error */
-.notification.success {
-    background-color: #28a745;
-    /* Verde para éxito */
-}
-
-.notification.error {
-    background-color: var(--error);
-    /* Rojo para error */
-}
-
-/* -------------------
-Panel de Formularios
-------------------- */
-.panel-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
 }
 
 .section-title {
@@ -550,6 +421,7 @@ Panel de Formularios
     color: var(--guinda);
 }
 
+/* ------------------- Formularios ------------------- */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -596,14 +468,12 @@ Panel de Formularios
     transition: all 0.2s ease;
 }
 
-/* Estilos para campos de formulario bloqueados */
 .form-group input:disabled,
 .form-group select:disabled,
 .form-group textarea:disabled {
     background-color: var(--gris);
     color: var(--degradado);
     cursor: not-allowed;
-    /* Cambia el cursos para indicar que no es editable/modificable */
 }
 
 .form-group input:focus,
@@ -618,6 +488,7 @@ Panel de Formularios
     resize: vertical;
 }
 
+/* ------------------- Botones de Formulario ------------------- */
 .btn-container {
     display: flex;
     justify-content: flex-end;
@@ -627,8 +498,8 @@ Panel de Formularios
     border-top: 1px solid var(--gris);
 }
 
-.btn-primary,
-.btn-secondary {
+.btn-guardar,
+.btn-limpiar {
     padding: 12px 25px;
     border-radius: 6px;
     font-size: 1em;
@@ -641,37 +512,32 @@ Panel de Formularios
     gap: 10px;
 }
 
-.btn-primary {
+.btn-guardar {
     background-color: var(--azul);
     color: white;
 }
 
-.btn-primary:hover {
+.btn-guardar:hover {
     background-color: var(--guinda);
 }
 
-.btn-secondary {
+.btn-limpiar {
     background-color: var(--gris);
     color: var(--btn);
 }
 
-.btn-secondary:hover {
+.btn-limpiar:hover {
     background-color: #d8d8d8;
     color: var(--guinda);
 }
 
-/* -------------------
-Contenedor de Tabla Proveedor
-------------------- */
-/* Estilos para el contenedor principal de la tabla */
+/* ------------------- Tablas ------------------- */
 .table-container {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
 }
 
-/* Encabezado del contenedor de la tabla (título y botones) */
 .table-header {
     display: flex;
     justify-content: space-between;
@@ -679,12 +545,10 @@ Contenedor de Tabla Proveedor
     margin-bottom: 1.5rem;
 }
 
-/* Contenedor de botones de acción */
 .table-actions {
     display: flex;
 }
 
-/* Estilo de los botones de acción */
 .action-btn {
     background-color: var(--azul);
     color: white;
@@ -700,15 +564,13 @@ Contenedor de Tabla Proveedor
     background-color: var(--guinda);
 }
 
-/* Contenedor para scroll horizontal */
 .table-wrapper {
     width: 100%;
-    max-height: 34rem;
+    max-height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-/* Estilos de la tabla */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -742,7 +604,6 @@ table tbody tr:hover {
     color: white;
 }
 
-/* Estilo para los mensajes de no datos */
 .no-data-message {
     text-align: center;
     color: #6c757d;
@@ -750,15 +611,11 @@ table tbody tr:hover {
     padding: 2rem;
 }
 
-/* ---------------------------------
-Contenedor de búsqueda Proveedor
----------------------------------- */
-/* Estilos para el buscador */
+/* ------------------- Búsqueda ------------------- */
 .search-container {
     display: flex;
     align-items: center;
-    width: 280px;
-    /* Ancho ajustable */
+    width: 100%;
     border: 1px solid var(--gris);
     border-radius: 20px;
     padding: 5px 15px;
@@ -773,7 +630,6 @@ Contenedor de búsqueda Proveedor
 
 .search-input {
     flex-grow: 1;
-    /* Permite que el input ocupe el espacio disponible */
     border: none;
     background: transparent;
     padding: 8px 10px;
@@ -785,7 +641,6 @@ Contenedor de búsqueda Proveedor
     outline: none;
 }
 
-/* Ocultar el icono de la lupa por defecto si está en el input */
 .search-input::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
@@ -801,19 +656,81 @@ Contenedor de búsqueda Proveedor
     color: var(--guinda);
 }
 
-/* -------------------
-Contenedor de imágenes
-------------------- */
-.dgic-container {
-    background-color: var(--gris);
+/* ------------------- Botón Toggle ------------------- */
+.toggle-tab {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+    transition: left 0.3s ease;
+}
+
+.toggle-tab-btn {
+    width: 40px;
+    height: 60px;
+    background-color: var(--azul);
+    color: white;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    padding: 15px 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-tab-btn:hover {
+    /* meemo --guinda*/
+    background-color: white;
+    /* meemo white*/
+    color: var(--guinda);
+    width: 45px;
+}
+
+.toggle-tab-btn i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-tab-btn.rotated i {
+    transform: rotate(180deg);
+}
+
+/* ------------------- Contenedor de Imágenes ------------------- */
+/* Nuevo diseño para el contenedor de imágenes */
+.dgic-container {
+    background-color: rgba(255, 255, 255, 0.555);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    /* X, Y, Capacidad, RGB, Opacidad*/
+    display: flex;
+    /* Usamos Flexbox para alinear elementos */
+    justify-content: center;
+    /* Centra los elementos horizontalmente */
+    align-items: center;
+    /* Centra los elementos verticalmente */
     gap: 3rem;
+    /* Espacio entre las imágenes */
     padding: 20px;
     border-radius: 12px;
     margin-top: 30px;
+    /* Espacio superior para separarlo del contenido de arriba */
     margin-bottom: 1rem;
+    /* Espacio fijo */
+    flex-shrink: 0;
+}
+
+.dgic-container p {
+    display: flex;
+    text-align: center;
+}
+
+.dgic-container span {
+    align-content: center;
+    padding-right: 0.5rem;
+    color: #282d33;
 }
 
 .dgic-container img {
@@ -823,14 +740,269 @@ Contenedor de imágenes
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.dgic-container img:hover {
-    transform: scale(1.05);
-    opacity: 1;
+.dgic-container .big {
+    height: 3rem;
 }
 
-/* -------------------
-Crecimiento del Contenedor Principal
-------------------- */
+/* ------------------- Notificaciones ------------------- */
+#notification {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    padding: 15px 25px;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#notification.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: var(--error);
+}
+
+/* ------------------- Pie de Página ------------------- */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--degradado);
+    font-size: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+/*
+ * ============================================
+ * Estilos del Wizard
+ * ============================================
+ */
+
+/* ------------------- Contenedor y Pasos ------------------- */
+.wizard-container {
+    width: 100%;
+    max-width: 70%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    padding: 40px;
+    margin: 40px auto;
+}
+
+.wizard-header {
+    background: transparent;
+    padding: 0;
+    text-align: center;
+    border-bottom: none;
+    margin-bottom: 30px;
+}
+
+.wizard-subtitle {
+    color: var(--degradado);
+}
+
+.wizard-body {
+    padding: 0;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* ------------------- Barra de Progreso ------------------- */
+.progress-container {
+    padding: 0;
+    background: transparent;
+    border-bottom: none;
+    position: relative;
+    height: 8px;
+    margin-bottom: 50px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--guinda);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.step-indicators {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.step-indicators::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+/* ------------------- Pasos e Iconos ------------------- */
+.step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--guinda);
+    border: 2px solid #ced4da;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    cursor: default;
+    /*pointer*/
+}
+
+.step.active {
+    background: var(--azul);
+    border-color: #3498db;
+    color: white;
+    box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+    transform: scale(1.1);
+}
+
+.step.completed {
+    background: #27ae60;
+    border-color: #27ae60;
+    color: white;
+}
+
+.step-label {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 14px;
+    color: var(--degradado);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.step.active .step-label {
+    color: #3498db;
+    font-weight: 600;
+}
+
+/* ------------------- Campos del Wizard ------------------- */
+.section-title {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 14px;
+    background: #f1f3f5;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #adb5bd;
+}
+
+/* ------------------- Botones del Wizard ------------------- */
+.btn-container {
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-prev {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-next {
+    background: #3498db;
+    color: white;
+}
+
+.btn-submit {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-prev:hover {
+    background: #5a6268;
+}
+
+.btn-next:hover {
+    background: #2980b9;
+}
+
+.btn-submit:hover {
+    background: #2ecc71;
+}
+
+/* ------------------- BtnToggle Crecer ------------------- */
 body.collapsed .sidebar {
     transform: translateX(-100%);
 }
@@ -844,20 +1016,28 @@ body.collapsed .toggle-tab {
     left: 0;
 }
 
-/* Ventana para Impresión */
+/* ------------------- Botón deshabilitado ------------------- */
+.btn-container button:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* ------------------- Estilos de impresión ------------------- */
 @media print {
 
+    .notification,
     .toggle-tab,
     .sidebar,
     .right-menu,
     .btn-container,
     .proveedores-panel {
-        display: none;
+        display: none !important;
     }
 
     @page {
-        /* Establece un margen de 1 cm para todos los lados de la página */
-        margin: 2cm;
+        margin: 1cm;
     }
 
     .main-content {
@@ -865,33 +1045,44 @@ body.collapsed .toggle-tab {
         transform-origin: top center;
         width: 100% !important;
         margin-left: 0 !important;
-        /* Elimina cualquier margen izquierdo que se usó para el sidebar. */
         box-sizing: border-box;
-        /* Incluye el padding y el border en el cálculo del ancho */
     }
 }
 
+/* ------------------- Estilos Responsive ------------------- */
+@media (max-width: 1200px) {
+    .dgic-container {
+        gap: 3rem;
+    }
 
-/* Nuevo y corregido Media Query */
+    .dgic-container p {
+        font-size: 0.8rem;
+    }
+
+    .dgic-container span {
+        width: 40%;
+    }
+
+    .dgic-container img {
+        height: 2.5rem;
+        /* Tamaño fijo de las imágenes para consistencia */
+    }
+}
+
 @media (max-width: 768px) {
-
-    /* Ocultar el menú lateral izquierdo por defecto en móviles */
     body {
-        /* Fuerza al body a estar en modo colapsado en pantallas pequeñas */
         display: block;
         padding-top: 20px;
     }
 
     body.collapsed .sidebar {
         transform: translateX(-100%);
-        /* Aseguramos que se oculte correctamente */
     }
 
     body:not(.collapsed) .sidebar {
         transform: translateX(0);
     }
 
-    /* El contenedor principal debe expandirse para ocupar todo el espacio */
     .main-content {
         margin-left: 0;
         margin-right: 0;
@@ -899,19 +1090,14 @@ body.collapsed .toggle-tab {
         padding: 20px;
     }
 
-    /* Posicionar el menú derecho para que esté visible en móviles */
     .right-menu {
         position: fixed;
-        /* Mantenemos su posición fija */
         top: 0;
         right: 0;
         width: 250px;
-        /* O el ancho que desees */
         z-index: 999;
-        /* Puedes agregar un transform para ocultarlo si quieres */
     }
 
-    /* Adaptar el botón de la pestaña */
     .toggle-tab {
         top: 1%;
         transform: none;
@@ -926,7 +1112,6 @@ body.collapsed .toggle-tab {
         width: 25px;
     }
 
-    /* Otros ajustes de diseño */
     .header {
         flex-direction: column;
         align-items: flex-start;
@@ -955,5 +1140,126 @@ body.collapsed .toggle-tab {
 
     .dgic-container img {
         height: 3rem;
+    }
+}
+
+/*
+ * ============================================
+ * Estilos del Modal
+ * ============================================
+ */
+
+/* ------------------- Estilos Generales del Modal ------------------- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    overflow: auto;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 900px;
+    transform: translateY(-20px);
+    animation: slideIn 0.4s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.modal-header h2 {
+    color: var(--guinda);
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.modal-txt {
+    color: var(--azul);
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+/* ------------------- Estilos de la Tabla en el Modal ------------------- */
+#proveedoresTableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#proveedoresTableContainer th,
+#proveedoresTableContainer td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+#proveedoresTableContainer th {
+    background-color: var(--guinda);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* ------------------- Animaciones ------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateY(0);
     }
 }

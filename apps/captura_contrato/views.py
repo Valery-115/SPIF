@@ -24,7 +24,7 @@ def captura_contrato(request):
     }
     
     #3. Renderiza la plantilla HTML y le pasa los datos (captura_contrato)
-    return render(request, 'pruebaC.html', contexto)
+    return render(request, 'captura_contrato.html', contexto)
 # --- HACER QUE 'CAMBIOS' FUNCIONE. ---
 
 # --- Muestra los Contratos ---
