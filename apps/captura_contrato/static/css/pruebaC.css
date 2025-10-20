@@ -349,7 +349,6 @@ Botón Cerrar Sesión
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     border-radius: 12px;
     margin: 10px 0 30px;
-
     flex-shrink: 0;
 }
 
@@ -375,7 +374,7 @@ Botón Cerrar Sesión
 .container {
     background-color: rgba(255, 255, 255, 0.692);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     padding: 30px;
     border: 1px solid #e0e0e0;
     /* Ocupa el espacio vertical restante en el 'main-content'*/
@@ -392,7 +391,7 @@ Botón Cerrar Sesión
     align-items: center;
     padding: 25px 40px;
     background-color: #f8f8f8;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     border-radius: 12px;
     margin-bottom: 30px;
     border-bottom: 1px solid var(--gris);

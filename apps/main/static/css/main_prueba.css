@@ -231,9 +231,7 @@ Barra lateral (Menú Izquierdo)
     justify-content: space-between;
     align-items: center;
     padding: 25px 40px 17px;
-    /* Memo */
     background-color: rgba(255, 255, 255, 0.692);
-    /* Memo */
     box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     /* X, Y, Capacidad, RGB, Opacidad*/
     border-radius: 12px;
@@ -257,7 +255,7 @@ Barra lateral (Menú Izquierdo)
     /* Memo background-color: #f8f8f8;*/
     background-color: rgba(255, 255, 255, 0.692);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
     padding: 35px;
     border: 1px solid #e0e0e0;
 }
