@@ -1,11 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Definiciones de constantes y variables globales para el módulo principal
+    // Definiciones de constantes y variables para el módulo principal
     const formElements = {
         contractForm: document.getElementById('contractForm'),
         contractNumberInput: document.getElementById('contractNumber'),
+        allFormInputs: document.querySelectorAll('#contractForm input, #contractForm select, #contractForm textarea'),
         otherFormInputs: document.querySelectorAll('#contractForm input:not(#contractNumber), #contractForm select, #contractForm textarea'),
+        btnGuardar: document.getElementById('btnGuardar'),
+        btnLimpiar: document.getElementById('btnLimpiar'),
     };
+
+    const btnAgregar = document.getElementById('btnAgregar');
+    const btnActualizar = document.getElementById('btnActualizar');
+    const btnImprimir = document.getElementById('btnImprimir');
+    const btnAdiciones = document.getElementById('btnAdiciones');
     const btnProveedores = document.getElementById('btnProveedores');
+    const proveedorModal = document.getElementById('proveedorModal');
+    const btnClose = document.querySelector('.close-btn');
     const tableProveedoresContainer = document.getElementById('proveedoresTableContainer');
     const editableFields = [
         'description',
@@ -15,12 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
         'status',
         'type'
     ];
-    let currentPage = 0;
-    const limit = 10;
-    let isLoading = false;
-    let hasMoreData = true;
-    let currentSearchTerm = '';
-    let scrollTimeout;
+
+    const wizardElements = {
+        step1: document.getElementById('step-1'),
+        step2: document.getElementById('step-2'),
+        step3: document.getElementById('step-3'),
+        progress: document.getElementById('progress'),
+    };
+
+    const lockableElements = [
+        btnAdiciones,
+        formElements.btnGuardar,
+        formElements.btnLimpiar,
+        btnActualizar,
+    ];
 
     // --- MÓDULO: GESTIÓN DE UTILERIAS ---
     const utils = (() => {
@@ -44,13 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     // --- MÓDULO: GESTIÓN DE LA INTERFAZ DE USUARIO (UI) ---
-    // (Notificaciones, Menús, etc...)
     const uiManager = (() => {
         const body = document.body;
         const toggleBtn = document.querySelector('.toggle-tab-btn');
         const notification = document.getElementById('notification');
 
-        // Configuración de 'Alternar menú de configuración' 
         const setupMenuToggle = () => {
             if (!toggleBtn) return;
             const isCollapsed = body.classList.contains('collapsed');
@@ -61,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Manejo de los click en el 'Submenu'
         const handleSubmenuClick = (event) => {
             const toggle = event.target.closest('.submenu-toggle, .submenu-toggle-2');
             if (!toggle) return;
@@ -83,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (arrow) arrow.classList.toggle('rotated');
         };
 
-        //Ver notificaciones
         const showNotification = (message, isSticky = false, isSuccess = false) => {
             if (!notification) {
                 console.error('El elemento #notification no existe.');
@@ -109,15 +123,55 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     })();
 
-    uiManager.init();
-
     // --- MÓDULO: GESTIÓN DE DATOS Y FORMULARIO ---
-    // (Llenado de form 'Contratos')
     const formManager = ((getCookie) => {
-        const lockForm = () => {
-            formElements.otherFormInputs.forEach(element => {
+        const lockAllFields = () => {
+            formElements.allFormInputs.forEach(element => {
                 element.disabled = true;
             });
+            lockableElements.forEach(element => {
+                if (element) {
+                    element.disabled = true;
+                }
+            });
+        };
+
+        const lockButtons = (mode) => {
+            if (mode === 'create') {
+                btnActualizar.disabled = true;
+                formElements.btnGuardar.disabled = false;
+                formElements.btnLimpiar.disabled = false;
+            } else if (mode === 'update') {
+                btnActualizar.disabled = false;
+                formElements.btnGuardar.disabled = true;
+                formElements.btnLimpiar.disabled = true;
+            } else if (mode === 'all') {
+                btnActualizar.disabled = true;
+                formElements.btnGuardar.disabled = true;
+                formElements.btnLimpiar.disabled = true;
+            }
+        };
+
+        const unlockAllFields = () => {
+            formElements.allFormInputs.forEach(element => {
+                if (element.id !== 'providerId' && element.id !== 'provider') {
+                    element.disabled = false;
+                }
+            });
+            lockableElements.forEach(element => {
+                if (element) {
+                    element.disabled = false;
+                }
+            });
+        };
+
+        const lockForm = (lockAll = true) => {
+            if (lockAll) {
+                formElements.allFormInputs.forEach(element => element.disabled = true);
+            } else {
+                formElements.otherFormInputs.forEach(element => element.disabled = true);
+                formElements.contractNumberInput.disabled = false;
+            }
         };
 
         const unlockEditableFields = () => {
@@ -143,17 +197,81 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('type2').value = data.type2 || '';
         };
 
-        const clearForm = () => {
-            formElements.contractForm.reset();
-        };
-
-        const saveContract = async () => {
+        const handleContractNumberInput = async () => {
             const contractNumber = formElements.contractNumberInput.value.trim();
-            if (!contractNumber) {
-                uiManager.showNotification('Debe buscar un contrato antes de guardar los cambios.', false, false);
+            if (contractNumber === '') {
+                clearForm();
+                lockForm(false);
                 return;
             }
+            try {
+                const response = await fetch(`/captura_contrato/obtener_contratos/${contractNumber}/`);
+                if (response.status === 404) {
+                    uiManager.showNotification('No se encontró un contrato con ese número.', false, false);
+                    clearForm();
+                    lockForm(false);
+                    return;
+                }
+                if (!response.ok) throw new Error(`Error en el servidor: ${response.status}`);
+                const data = await response.json();
+                fillFormWithData(data);
+                unlockEditableFields();
+                formElements.contractNumberInput.disabled = true;
+                wizardManager.goToSaveStep();
+            } catch (error) {
+                console.error('Error al obtener los datos del contrato:', error);
+                uiManager.showNotification('Ocurrió un error al buscar el contrato. Intente de nuevo.', false, false);
+                clearForm();
+                lockForm(false);
+            }
+        };
 
+        const saveNewContract = async () => {
+            const contractData = {
+                contractNumber: formElements.contractNumberInput.value,
+                description: document.getElementById('description').value,
+                fund: document.getElementById('fund').value,
+                contractDate: document.getElementById('contractDate').value,
+                endDate: document.getElementById('endDate').value,
+                status: document.getElementById('status').value,
+                type: document.getElementById('type').value,
+                providerId: document.getElementById('providerId').value,
+                provider: document.getElementById('provider').value,
+                initialAmount: document.getElementById('initialAmount').value,
+                amount: document.getElementById('amount').value,
+                label: document.getElementById('label').value,
+                type1: document.getElementById('type1').value,
+                type2: document.getElementById('type2').value
+            };
+
+            uiManager.showNotification('Guardando nuevo contrato...', true, false);
+            try {
+                const response = await fetch('/crear_contrato/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(contractData)
+                });
+                if (!response.ok) throw new Error(`Error en el servidor: ${response.status}`);
+                const data = await response.json();
+                uiManager.showNotification('¡Contrato guardado exitosamente!', false, true);
+                clearForm();
+                lockAllFields();
+                wizardManager.resetWizard();
+            } catch (error) {
+                console.error('Error al guardar el nuevo contrato:', error);
+                uiManager.showNotification('Ocurrió un error al guardar el nuevo contrato.', false, false);
+            }
+        };
+
+        const updateExistingContract = async () => {
+            const contractNumber = formElements.contractNumberInput.value.trim();
+            if (!contractNumber) {
+                uiManager.showNotification('Debe buscar un contrato para actualizar.', false, false);
+                return;
+            }
             const contractData = {
                 contractNumber: contractNumber,
                 description: document.getElementById('description').value,
@@ -174,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             uiManager.showNotification('Guardando cambios...', true, false);
 
             try {
-                const response = await fetch(`/SPIF/actualizar_contrato/${contractNumber}/`, {
+                const response = await fetch(`/actualizar_contrato/${contractNumber}/`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -189,54 +307,94 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 uiManager.showNotification('¡Cambios guardados exitosamente!', false, true);
-                lockForm();
+                clearForm();
+                lockAllFields();
+                wizardManager.resetWizard();
             } catch (error) {
                 console.error('Error al guardar el contrato:', error);
                 uiManager.showNotification('Ocurrió un error al guardar los cambios.', false, false);
             }
         };
 
-
-        const handleContractNumberInput = async () => {
-            const contractNumber = formElements.contractNumberInput.value.trim();
-            if (contractNumber === '') {
-                clearForm();
-                lockForm();
-                return;
-            }
-            try {
-                const response = await fetch(`/SPIF/obtener_contratos/${contractNumber}/`);
-                if (response.status === 404) {
-                    uiManager.showNotification('No se encontró un contrato con ese número.', false, false);
-                    clearForm();
-                    lockForm();
-                    return;
-                }
-                if (!response.ok) {
-                    throw new Error(`Error en el servidor: ${response.status}`);
-                }
-                const data = await response.json();
-                fillFormWithData(data);
-                unlockEditableFields();
-            } catch (error) {
-                console.error('Error al obtener los datos del contrato:', error);
-                uiManager.showNotification('Ocurrió un error al buscar el contrato. Intente de nuevo.', false, false);
-                clearForm();
-                lockForm();
-            }
+        const clearForm = () => {
+            formElements.contractForm.reset();
         };
 
         return {
+            lockAllFields,
             lockForm,
+            lockButtons,
+            unlockAllFields,
             clearForm,
-            saveContract,
+            saveNewContract,
+            updateExistingContract,
             handleContractNumberInput
         };
     })(utils.getCookie);
 
+    // --- MÓDULO: GESTIÓN DEL FLUJO DE TRABAJO (WIZARD) ---
+    const wizardManager = (() => {
+        const updateProgress = (step) => {
+            if (!wizardElements.progress) return;
+            const progressPercentage = (step - 1) * 50;
+            wizardElements.progress.style.width = `${progressPercentage}%`;
+        };
+
+        const updateSteps = (currentStep) => {
+            [wizardElements.step1, wizardElements.step2, wizardElements.step3].forEach(step => {
+                step.classList.remove('active');
+            });
+            if (currentStep === 1) wizardElements.step1.classList.add('active');
+            if (currentStep === 2) wizardElements.step2.classList.add('active');
+            if (currentStep === 3) wizardElements.step3.classList.add('active');
+        };
+
+        const startCreateMode = () => {
+            formManager.clearForm();
+            formManager.unlockAllFields();
+            formManager.lockButtons('create');
+            uiManager.showNotification('Modo de creación habilitado. Llene el formulario para continuar.', false, true);
+            updateProgress(2);
+            updateSteps(2);
+        };
+
+        const startUpdateMode = () => {
+            formManager.clearForm();
+            formManager.lockForm(false);
+            formManager.lockButtons('update');
+            uiManager.showNotification('Modo de actualización habilitado. Ingrese el número de contrato.', false, true);
+            updateProgress(2);
+            updateSteps(2);
+        };
+
+        const goToSaveStep = () => {
+            updateProgress(3);
+            updateSteps(3);
+        };
+
+        const resetWizard = () => {
+            updateProgress(1);
+            updateSteps(1);
+        };
+
+        return {
+            init: resetWizard,
+            startCreateMode,
+            startUpdateMode,
+            goToSaveStep,
+            resetWizard
+        };
+    })();
+
     // --- MÓDULO: GESTIÓN DE TABLA Y API ---
-    // (Obtención de datos de 'Proveedores')
     const tableManager = (() => {
+        let currentPage = 0;
+        const limit = 10;
+        let isLoading = false;
+        let hasMoreData = true;
+        let currentSearchTerm = '';
+        let scrollTimeout;
+
         const debounce = (func, delay) => {
             let timeoutId;
             return function (...args) {
@@ -252,9 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tableProveedoresContainer.innerHTML = `
                 <div class="table-container">
                     <div class="table-header">
-                        <h2 class="section-title"><i class="fas fa-truck"></i> Listado de Proveedores</h2>
                         <div class="search-container">
-                            <input type="text" id="searchInput" placeholder="Buscar por Proveedor o ID..." class="search-input" value="${currentSearchTerm}">
+                            <input type="text" id="searchInput" placeholder="Buscar por Nombre o ID del Proveedor..." class="search-input" value="${currentSearchTerm}">
                             <i class="fas fa-search search-icon"></i>
                         </div>
                     </div>
@@ -274,12 +431,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+
+            // 1. Adjuntar el evento de búsqueda
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('input', debounce((event) => {
                     currentSearchTerm = event.target.value.trim();
                     fetchProveedores(true);
                 }, 500));
+            }
+
+            // 2. Adjuntar el evento de scroll para la carga incremental
+            const tableWrapper = tableProveedoresContainer.querySelector('.table-wrapper');
+            if (tableWrapper) {
+                tableWrapper.addEventListener('scroll', () => {
+                    if (scrollTimeout) clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        const {
+                            scrollTop,
+                            scrollHeight,
+                            clientHeight
+                        } = tableWrapper;
+                        if (scrollTop + clientHeight >= scrollHeight - 200) {
+                            fetchProveedores(false);
+                        }
+                    }, 100);
+                });
             }
         };
 
@@ -314,7 +491,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('providerId').value = proveedorId;
                 document.getElementById('provider').value = proveedorNombre;
                 uiManager.showNotification(`Proveedor ${proveedorNombre} seleccionado.`, false, true);
+                proveedorModal.style.display = 'none';
                 tableProveedoresContainer.style.display = 'none';
+            }
+        };
+
+        // NUEVA FUNCIÓN PARA RESETEAR LA TABLA Y SUS ESTADOS
+        const resetTable = () => {
+            currentPage = 0;
+            currentSearchTerm = '';
+            hasMoreData = true;
+            const tableBody = tableProveedoresContainer.querySelector('tbody');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+            }
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
             }
         };
 
@@ -329,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
             uiManager.showNotification('Cargando proveedores...', true, false);
             try {
                 const offset = currentPage * limit;
-                let url = `SPIF/obtener_proveedores/?offset=${offset}&limit=${limit}`;
+                let url = `/obtener_proveedores/?offset=${offset}&limit=${limit}`;
                 if (currentSearchTerm) {
                     url += `&search=${encodeURIComponent(currentSearchTerm)}`;
                 }
@@ -352,16 +545,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             renderTableStructure,
             fetchProveedores,
-            handleTableClick
+            handleTableClick,
+            resetTable,
         };
     })();
 
     // --- MANEJO DE EVENTOS INICIALES ---
-    const btnPrimary = document.getElementById('btn-primary');
-    const btnGrabar = document.getElementById('btnGrabar');
-    const btnImprimir = document.getElementById('btnImprimir');
-
-
     formElements.contractNumberInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -369,27 +558,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if (btnProveedores) {
-        btnProveedores.addEventListener('click', async (event) => {
+    if (btnAgregar) {
+        btnAgregar.addEventListener('click', (event) => {
             event.preventDefault();
-            tableProveedoresContainer.style.display = 'block';
-            currentSearchTerm = '';
-            tableManager.renderTableStructure();
-            tableManager.fetchProveedores(true);
+            wizardManager.startCreateMode();
         });
     }
 
-    if (btnPrimary) {
-        btnPrimary.addEventListener('click', (event) => {
+    if (formElements.btnGuardar) {
+        formElements.btnGuardar.addEventListener('click', (event) => {
             event.preventDefault();
-            formManager.saveContract();
+            formManager.saveNewContract();
         });
     }
 
-    if (btnGrabar) {
-        btnGrabar.addEventListener('click', (event) => {
+    if (btnActualizar) {
+        btnActualizar.addEventListener('click', (event) => {
             event.preventDefault();
-            formManager.saveContract();
+            formManager.updateExistingContract();
+        });
+    }
+
+    if (formElements.btnLimpiar) {
+        formElements.btnLimpiar.addEventListener('click', (event) => {
+            event.preventDefault();
+            formManager.clearForm();
         });
     }
 
@@ -399,35 +592,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    tableProveedoresContainer.addEventListener('click', tableManager.handleTableClick);
+    // Evento para mostrar el modal de proveedores
+    if (btnProveedores) {
+        btnProveedores.addEventListener('click', async (event) => {
+            event.preventDefault();
+            // Llama a la función de reseteo antes de mostrar el Modal
+            tableManager.resetTable();
 
-    // NUEVO CÓDIGO: Observador de mutación para adjuntar el evento de scroll.
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length > 0) {
-                const tableWrapper = document.querySelector('.table-wrapper');
-                if (tableWrapper && !tableWrapper.dataset.listenerAttached) {
-                    tableWrapper.addEventListener('scroll', () => {
-                        if (scrollTimeout) clearTimeout(scrollTimeout);
-                        scrollTimeout = setTimeout(() => {
-                            const {
-                                scrollTop,
-                                scrollHeight,
-                                clientHeight
-                            } = tableWrapper;
-                            if (scrollTop + clientHeight >= scrollHeight - 200) {
-                                tableManager.fetchProveedores(false);
-                            }
-                        }, 100);
-                    });
-                    tableWrapper.dataset.listenerAttached = 'true';
-                }
+            //Muestra el Modal y el contenedor de la Tabla_Proveedores
+            proveedorModal.style.display = 'flex';
+            tableProveedoresContainer.style.display = 'block';
+
+            //Re-renderiza la estructura de la tabla (IMPORTANTE)
+            tableManager.renderTableStructure();
+
+            /*Llama a la función para cargar a los proveedores,
+                indicando que es una nueva búsqueda. */
+            tableManager.fetchProveedores(true);
+        });
+    }
+
+    // Eventos para ocultar el modal
+    if (btnClose) {
+        btnClose.addEventListener('click', () => {
+            proveedorModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === proveedorModal) {
+                proveedorModal.style.display = 'none';
             }
         });
-    });
+    }
 
-    observer.observe(tableProveedoresContainer, {
-        childList: true
-    });
-    formManager.lockForm();
+    if (btnAdiciones) {
+        btnAdiciones.addEventListener('click', (event) => {
+            event.preventDefault();
+            alert('Funcionalidad de "Adiciones" en desarrollo. Se abrirá un nuevo formulario para registrar una adición al contrato.');
+        });
+    }
+
+    // Delegación de eventos para la tabla de proveedores
+    tableProveedoresContainer.addEventListener('click', tableManager.handleTableClick);
+
+    // Inicializar los módulos
+    uiManager.init();
+    wizardManager.init();
+    formManager.lockAllFields();
 });

@@ -1051,6 +1051,10 @@ body.collapsed .toggle-tab {
 
 /* ------------------- Estilos Responsive ------------------- */
 @media (max-width: 1200px) {
+    .page-title {
+        font-size: 1.4rem;
+    }
+
     .dgic-container {
         gap: 3rem;
     }
@@ -1066,6 +1070,10 @@ body.collapsed .toggle-tab {
     .dgic-container img {
         height: 2.5rem;
         /* Tamaño fijo de las imágenes para consistencia */
+    }
+
+    .dgic-container .big {
+        height: 2rem;
     }
 }
 
