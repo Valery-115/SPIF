@@ -1,11 +1,13 @@
 from django.urls import path
 from . import views
+from .views import *
 
 urlpatterns = [
-    path('captura_contrato/', views.captura_contrato, name='captura_contrato'),
+    # El '.as_view', hace que Django llame el método correcto de la clase (ContratoListView)
+    path('', pestaña_captura_contratos.as_view(), name = 'captura_contrato'),
     # --- Procesos dentro de 'Captura_Contrato' ---
-    path('obtener_contratos/<str:numero_contrato>/', views.obtener_contratos, name='obtener_contratos'),
-    path('actualizar_contrato/<str:numero_contrato>/', views.actualizar_contrato, name='actualizar_contrato'),
+    path('buscar_contrato/<str:numero_contrato>/', buscar_contrato.as_view(), name='buscar_contratos'),
+    path('actualizar_contrato/', views.update_contrato.as_view(), name='update_contrato'),
     path('crear_contrato/', views.crear_contrato, name='crear_contrato'),
     path('obtener_proveedores/', views.obtener_proveedores, name='obtener_proveedores'),
 ]

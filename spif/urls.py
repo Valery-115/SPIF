@@ -22,5 +22,5 @@ urlpatterns = [
     # Cuando la URL comience con 'SPIF/', delega el resto a 'apps.login.urls'
     path('', include('apps.login.urls')),
     path('', include('apps.main.urls')),
-    path('', include('apps.captura_contrato.urls')),
+    path('captura_contrato/', include('apps.captura_contrato.urls')),
 ]

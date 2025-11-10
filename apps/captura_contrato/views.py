@@ -1,10 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import logout
 from .models import Contrato, Proveedor
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+# Son los métodos HTTP (Get, Post, Put) que maneja Django
+from django.views import View
+from django.views.generic import *
+from django.http import JsonResponse
 import json
 from django.db.models import Q # Importamos 'Q' para búsquedas complejas
+
+
 
 # Create your views here.
 # --- Pestalla Web (Login) ---
@@ -12,98 +16,97 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
-# --- Pestalla Web ---
-#Para la BD {rendereiza la plantilla}
-def captura_contrato(request):
-    #1. Obtiene todos los contratos de la base de datos
-    contratos = Contrato.objects.all().select_related('contrato')
+# --- Carga la pestaña captura_contratos --- (Para cargar el template al ingresar en la URL)
+class pestaña_captura_contratos(TemplateView):
+    # Para indicar, que si se entra a esta clase en el URL, cargue está plantilla
+    template_name = 'captura_contrato.html'
     
-    #2. Prepara los datos para enviarlos a la Plantilla
-    contexto = {
-        'contratos': contratos
-    }
-    
-    #3. Renderiza la plantilla HTML y le pasa los datos (captura_contrato)
-    return render(request, 'captura_contrato.html', contexto)
-# --- HACER QUE 'CAMBIOS' FUNCIONE. ---
+# --- Busca el contrato especifico para actualizar los datos ---
+class buscar_contrato(View):
+    # El metodo get 'conseguir' es el mejor método para la búsqueda
+    # EL 'número_contrato' viene de la URL
+    def get(self, request, numero_contrato):
 
-# --- Muestra los Contratos ---
-#View de Query en la BD (CONTRATOS)
-def obtener_contratos(request, numero_contrato):
-    #Usamos get_object_or_404 para buscar el objeto. Si no lo encuentra,
-    #automáticamente devuelve una respuesta HTTP 404.
-    try:
-        contrato = Contrato.objects.get(numero_contrato=numero_contrato)
-        #Aqui 'mapeamos' (correspondencia ente FrontEnd y BackEnd) los nombres
-        #de los campos del modelo a los IDs de los inputs HTML
-        datos_contrato = {
-            'providerId': contrato.id_proveedor.id_proveedor,
-            'provider': contrato.proveedor.proveedor,
-            'description': contrato.descripcion,
-            'initialAmount': contrato.monto_inicial,
-            'amount': contrato.importe,
-            'fund': contrato.fondo,
-            'contractDate': contrato.fecha_contrato,
-            'endDate': contrato.fecha_terminacion,
-            'status': contrato.status,
-            'label': contrato.label,
-            'type': contrato.tipo,
-            'type1': contrato.tipo_1,
-            'type2': contrato.tipo_2,
-        }
-        #Devolvemos los datos como una respuesta 'JSON' {Se usa para el almacenamiento y trasferencia de datos,
-        # principalmente entre un servidor (backend) y un cliente (frontend).}
-        return JsonResponse(datos_contrato, status=200)
-    
-    except Contrato.DoesNotExist:
-        #Si no se encuentra el contrato, devolvemos un respuesta de error 404.
-        return HttpResponse(status=404)
-
-# ---actualiza los contratos --- (dinamico)
-@csrf_exempt  # <-- IMPORTANTE: Esto es necesario para peticiones PUT o POST que no sean de un formulario de Django.
-def actualizar_contrato(request, numero_contrato):
-    if request.method == 'PUT':
         try:
-            # 1. Obtener los datos del JSON
-            data = json.loads(request.body)
-            
-            # 2. Buscar el objeto Contrato por su número
-            # (Aquí debes usar tu modelo de Django)
+            # Django para el número del contrato de la URL, here
             contrato = Contrato.objects.get(numero_contrato=numero_contrato)
             
-            # 3. Obtiene el ID del proveedor desde los datos del JSON
+            #Aqui 'mapeamos' (correspondencia ente FrontEnd y BackEnd) los nombres
+            #de los campos del modelo a los IDs de los inputs HTML
+            datos_contrato = {
+                'providerId': contrato.id_proveedor.id_proveedor,
+                'provider': contrato.proveedor.proveedor,
+                'description': contrato.descripcion,
+                'initialAmount': contrato.monto_inicial,
+                'amount': contrato.importe,
+                'fund': contrato.fondo,
+                'contractDate': contrato.fecha_contrato,
+                'endDate': contrato.fecha_terminacion,
+                'status': contrato.status,
+                'label': contrato.label,
+                'type': contrato.tipo,
+                'type1': contrato.tipo_1,
+                'type2': contrato.tipo_2,
+            }
+            #Devolvemos los datos como una respuesta 'JSON' {Se usa para el almacenamiento y trasferencia de datos,
+            # principalmente entre un servidor (backend) y un cliente (frontend).}
+            return JsonResponse(datos_contrato, status=200)
+        
+        except Contrato.DoesNotExist:
+            return JsonResponse({'Error:':'Contrato no registrado en la BD.'}, status=404)
+        except Exception:
+            return JsonResponse({'Error:':'Error Interno!'}, status=500)
+
+# ---actualiza los contratos --- (dinamico)
+class update_contrato(View):
+    
+    # Método CRUD para actualizar datos 'PUT'
+    def put(self, request, *args, **kwargs):
+        try:
+            # 1. Obtener los datos del JSON (Decodifica)
+            data = json.loads(request.body)
+            
+            # 2. Obtener el identificador del Contrato y del Proveedor desde los datos JSON
+            numero_contrato = data.get('contractNumber')
             id_proveedor = data.get('providerId')
             
-            # 4. Busca el objeto Proveedor
-            # Si no se encuentra, Django lanzará una excepción 'DoesNotExist'
+            if not numero_contrato:
+                # Error si no se encuentra el contrato a update (400 = Petición del usuario invalida)
+                return JsonResponse({'Error:':'Ingrese el número de contrato para la búsqueda, por favor.'}, status = 400)
+            
+            # 3. Buscar el contrato existente y el proveedor
+            contrato = Contrato.objects.get(numero_contrato=numero_contrato)
             proveedor_obj = Proveedor.objects.get(id_proveedor=id_proveedor)
             
-            # 5. Asigna el objeto Proveedor a la clave foránea
+            # 4. Asignar llaver foraneas y campos (Update controlada)  
+            # Asigna el objeto Proveedor a la clave foránea
             contrato.id_proveedor = proveedor_obj
             contrato.proveedor = proveedor_obj
-            
-            # 6. Actualizar los campos del modelo con los datos recibidos
-            contrato.descripcion = data.get('description')
-            contrato.fondo = data.get('fund')
-            contrato.fecha_contrato = data.get('contractDate')
-            contrato.fecha_terminacion = data.get('endDate')
-            contrato.status = data.get('status')
-            contrato.tipo = data.get('type')
-            
-            # 7. Guardar los cambios en la base de datos
+                
+            # Actualizar los campos del modelo con los datos recibidos (Solo se actualizan los de la lista)
+            contrato.descripcion = data.get('description', contrato.descripcion)
+            contrato.fondo = data.get('fund', contrato.fondo)
+            contrato.fecha_contrato = data.get('contractDate', contrato.fecha_contrato)
+            contrato.fecha_terminacion = data.get('endDate', contrato.fecha_terminacion)
+            contrato.status = data.get('status', contrato.status)
+            contrato.tipo = data.get('type', contrato.tipo)
+                
+            # 5. Guardar los cambios en la base de datos
             contrato.save()
-            
-            # 8. Devolver una respuesta exitosa
-            return JsonResponse({'message': 'Contrato actualizado exitosamente'}, status=200)
-        except Contrato.DoesNotExist:
-            return JsonResponse({'error': 'Contrato no encontrado'}, status=404)
-        except Proveedor.DoesNotExist:
-            return JsonResponse({'error': 'Proveedor no encontrado'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+                
+            # 6. Devolver una respuesta exitosa
+            return JsonResponse({'Mensaje de Exito': 'Contrato actualizado exitosamente'}, status=200)
         
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
-
+            # 7. Manejo de errores (404: Error de BD, 400: Error al validar JSON o los datos enviados)
+        except Contrato.DoesNotExist:
+            return JsonResponse({'Error': f'Contrato No.{numero_contrato} no encontrado'}, status=404)
+        except Proveedor.DoesNotExist:
+            return JsonResponse({'Error': f'Proveedor con el ID{id_proveedor} no encontrado'}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({'Error': f'Trasformación de datos a JSON invalido.'}, status = 400)
+        except Exception as e:
+            return JsonResponse({'Error': f'Error interno del servidor : {str(e)}'}, status=500)
+            
 # --- Crear un nuevo contrato ---
 def crear_contrato(request):
     if request.method == 'POST':

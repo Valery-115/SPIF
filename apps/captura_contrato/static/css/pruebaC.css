@@ -32,7 +32,7 @@
     --gris: #e5e5e6;
     --azul: #003257;
     --guinda: #831f46;
-    --degradado: #525B68;
+    --degradado: #525b68;
     --btn: #353535;
     --error: #d10011;
 }
@@ -479,12 +479,24 @@ Botón Cerrar Sesión
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--guinda);
-    box-shadow: 0 0 5px rgba(131, 31, 70, 0.2);
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
 .form-group textarea {
     resize: vertical;
+}
+
+/* Estilo para los campos de Proveedor ID y Proveedor */
+#providerId:enabled,
+#provider:enabled,
+#providerId:focus,
+#provider:focus {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: default;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px rgb(206, 212, 218);
 }
 
 /* ------------------- Botones de Formulario ------------------- */
@@ -954,14 +966,6 @@ table tbody tr:hover {
     transition: all 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-}
-
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: #adb5bd;
@@ -1016,6 +1020,13 @@ body.collapsed .toggle-tab {
 }
 
 /* ------------------- Botón deshabilitado ------------------- */
+.right-menu-content button:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
 .btn-container button:disabled {
     background-color: var(--gris);
     color: var(--degradado);

@@ -80,23 +80,23 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 #BD del Servidor
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spif',
-        'USER': 'spif_user',
-        'PASSWORD': 'temporal',
-        'HOST': '10.236.62.44',
-        'PORT': '5434',
-    }
-}
-
 #DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'spif',
+#        'USER': 'spif_user',
+#        'PASSWORD': 'temporal',
+#        'HOST': '10.236.62.44',
+#        'PORT': '5434',
 #    }
 #}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation

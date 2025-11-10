@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Declaración del modo para difirenciar entre 'Create' o 'Update'
+    let modoActual = null;
     // Definiciones de constantes y variables para el módulo principal
     const formElements = {
         contractForm: document.getElementById('contractForm'),
@@ -33,15 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
         progress: document.getElementById('progress'),
     };
 
+    //Los btn que cambian dependiendo del modo 'create/update'
     const lockableElements = [
         btnAdiciones,
         formElements.btnGuardar,
         formElements.btnLimpiar,
-        btnActualizar,
+        btnProveedores,
     ];
 
     // --- MÓDULO: GESTIÓN DE UTILERIAS ---
     const utils = (() => {
+        // --- {Función que se encarga de conseguir el Token de seguridad que Django crea
+        // al usar Forms y puedan ejecutarse sin problemas los métodos CRUD en el JS 
+        // (JS no cuenta con el token que se crea en el HTML)} ---
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -124,40 +130,68 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     // --- MÓDULO: GESTIÓN DE DATOS Y FORMULARIO ---
-    const formManager = ((getCookie) => {
-        const lockAllFields = () => {
+    const formManager = ((getCookie, fElements, btnAdd, btnUpdate, editable, lockable) => {
+
+        const formElements = fElements;
+        const btnAgregar = btnAdd;
+        const btnActualizar = btnUpdate;
+        const editableFields = editable;
+        const lockableElements = lockable; //Variable local para usar
+
+        // Bloquear todos los campos
+        const estructuraInicial = () => {
+            //Bloquear todos los impus del formulario 
             formElements.allFormInputs.forEach(element => {
                 element.disabled = true;
             });
+
+            //Bloquear los elementos configurados (Adiciones, Proveedores, Guardar, Limpiar, Actualizar)
             lockableElements.forEach(element => {
                 if (element) {
                     element.disabled = true;
                 }
             });
+
+            // Los unicos btn habilitados
+            if (btnAgregar) btnAgregar.disabled = false;
+            if (btnActualizar) btnActualizar.disabled = false;
         };
 
-        const lockButtons = (mode) => {
+        // Lógica para bloquear los btn dependiendo del estado
+        const lockButtonStatus = (mode) => {
             if (mode === 'create') {
-                btnActualizar.disabled = true;
-                formElements.btnGuardar.disabled = false;
-                formElements.btnLimpiar.disabled = false;
+                lockableElements.forEach(element => {
+                    if (element) {
+                        element.disabled = false;
+                    }
+                })
+                btnAdiciones.disabled = true;
             } else if (mode === 'update') {
-                btnActualizar.disabled = false;
-                formElements.btnGuardar.disabled = true;
-                formElements.btnLimpiar.disabled = true;
-            } else if (mode === 'all') {
-                btnActualizar.disabled = true;
-                formElements.btnGuardar.disabled = true;
-                formElements.btnLimpiar.disabled = true;
+                lockableElements.forEach(element => {
+                    if (element) {
+                        element.disabled = true;
+                    }
+                })
             }
         };
 
-        const unlockAllFields = () => {
-            formElements.allFormInputs.forEach(element => {
-                if (element.id !== 'providerId' && element.id !== 'provider') {
+        // Función para habilitar los botones de función solo después de buscar exitosamente
+        const btnAfterBuscar = () => {
+            lockableElements.forEach(element => {
+                if (element) {
                     element.disabled = false;
                 }
+            })
+            formElements.btnLimpiar.disabled = true;
+        };
+
+        // Desbloquar todos los campos
+        const unlockAllFields = () => {
+            formElements.allFormInputs.forEach(element => {
+                element.disabled = false;
             });
+
+            // Se habilitan los btn de (Guardar, Limpiar, y de menú de funciones)
             lockableElements.forEach(element => {
                 if (element) {
                     element.disabled = false;
@@ -165,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        // Bloquear formulario
         const lockForm = (lockAll = true) => {
             if (lockAll) {
                 formElements.allFormInputs.forEach(element => element.disabled = true);
@@ -174,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        // Desbloquear campos editables
         const unlockEditableFields = () => {
             editableFields.forEach(fieldId => {
                 const element = document.getElementById(fieldId);
@@ -181,7 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        const fillFormWithData = (data) => {
+        // Rellenar el formulario con datos
+        const rellenadoFormulario = (data) => {
             document.getElementById('providerId').value = data.providerId || '';
             document.getElementById('provider').value = data.provider || '';
             document.getElementById('description').value = data.description || '';
@@ -197,26 +234,41 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('type2').value = data.type2 || '';
         };
 
-        const handleContractNumberInput = async () => {
+        // Función para buscar el contrato por el campo de ID para el estado de Actualizar
+        const busquedaContratoCampo = async () => {
+
+            // Obtiene el número de contrato del campo del formulario
             const contractNumber = formElements.contractNumberInput.value.trim();
+
+            // Si está vacio, limpia y bloquea el resto del Form.
             if (contractNumber === '') {
                 clearForm();
                 lockForm(false);
                 return;
             }
+
             try {
-                const response = await fetch(`/captura_contrato/obtener_contratos/${contractNumber}/`);
+                // Construye la URL completa para que el Backend pueda buscar el contrato por medio de la URL
+                // El punto inicial (./) indica que la búsqueda empieza después del último '/'
+                const response = await fetch(`./buscar_contrato/${contractNumber}/`);
+
+                // Sí el método de la vista de busqueda del Backend no lo encuentra manda una notificacion
                 if (response.status === 404) {
                     uiManager.showNotification('No se encontró un contrato con ese número.', false, false);
                     clearForm();
                     lockForm(false);
                     return;
                 }
+
                 if (!response.ok) throw new Error(`Error en el servidor: ${response.status}`);
+                // Recibe la respuesta, conviertiendo los datos JSON de Django a un objt js
                 const data = await response.json();
-                fillFormWithData(data);
+
+                // Es la función que se encarga de rellenar todos los campos del formulario  con los datos recibidos
+                rellenadoFormulario(data);
                 unlockEditableFields();
                 formElements.contractNumberInput.disabled = true;
+                formManager.btnAfterBuscar(); // Esta función ahora habilita: Guardar, Limpiar, Proveedor y Adiciones.
                 wizardManager.goToSaveStep();
             } catch (error) {
                 console.error('Error al obtener los datos del contrato:', error);
@@ -226,52 +278,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const saveNewContract = async () => {
-            const contractData = {
-                contractNumber: formElements.contractNumberInput.value,
-                description: document.getElementById('description').value,
-                fund: document.getElementById('fund').value,
-                contractDate: document.getElementById('contractDate').value,
-                endDate: document.getElementById('endDate').value,
-                status: document.getElementById('status').value,
-                type: document.getElementById('type').value,
-                providerId: document.getElementById('providerId').value,
-                provider: document.getElementById('provider').value,
-                initialAmount: document.getElementById('initialAmount').value,
-                amount: document.getElementById('amount').value,
-                label: document.getElementById('label').value,
-                type1: document.getElementById('type1').value,
-                type2: document.getElementById('type2').value
-            };
-
-            uiManager.showNotification('Guardando nuevo contrato...', true, false);
-            try {
-                const response = await fetch('/crear_contrato/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify(contractData)
-                });
-                if (!response.ok) throw new Error(`Error en el servidor: ${response.status}`);
-                const data = await response.json();
-                uiManager.showNotification('¡Contrato guardado exitosamente!', false, true);
-                clearForm();
-                lockAllFields();
-                wizardManager.resetWizard();
-            } catch (error) {
-                console.error('Error al guardar el nuevo contrato:', error);
-                uiManager.showNotification('Ocurrió un error al guardar el nuevo contrato.', false, false);
-            }
-        };
-
-        const updateExistingContract = async () => {
+        // Modo 'Crear' o 'Actualizar' en uno
+        const createOrUpdateContract = async (mode) => { // Recibe el modo como argumento
             const contractNumber = formElements.contractNumberInput.value.trim();
-            if (!contractNumber) {
+            if (mode === 'update' && !contractNumber) {
                 uiManager.showNotification('Debe buscar un contrato para actualizar.', false, false);
                 return;
             }
+
+            // Obtener datos del formulario (la misma lógica para ambos modos)
             const contractData = {
                 contractNumber: contractNumber,
                 description: document.getElementById('description').value,
@@ -289,11 +304,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 type2: document.getElementById('type2').value
             };
 
-            uiManager.showNotification('Guardando cambios...', true, false);
+            const isUpdate = mode === 'update';
+            const endpoint = isUpdate ? `/captura_contrato/actualizar_contrato/` : '/crear_contrato/';
+            const method = isUpdate ? 'PUT' : 'POST';
+            const loadingMessage = isUpdate ? 'Guardando cambios...' : 'Guardando nuevo contrato...';
+            const successMessage = isUpdate ? '¡Cambios guardados exitosamente!' : '¡Contrato guardado exitosamente!';
+            const errorMessage = isUpdate ? 'Ocurrió un error al guardar los cambios.' : 'Ocurrió un error al guardar el nuevo contrato.';
+
+            uiManager.showNotification(loadingMessage, true, false);
 
             try {
-                const response = await fetch(`/actualizar_contrato/${contractNumber}/`, {
-                    method: 'PUT',
+                const response = await fetch(endpoint, {
+                    method: method,
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': getCookie('csrftoken')
@@ -306,31 +328,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(`Error en el servidor: ${response.status} - ${errorText}`);
                 }
 
-                uiManager.showNotification('¡Cambios guardados exitosamente!', false, true);
+                uiManager.showNotification(successMessage, false, true);
                 clearForm();
-                lockAllFields();
-                wizardManager.resetWizard();
+                estructuraInicial();
+                wizardManager.resetWizard(); // Esto también resetea modoActual
             } catch (error) {
-                console.error('Error al guardar el contrato:', error);
-                uiManager.showNotification('Ocurrió un error al guardar los cambios.', false, false);
+                console.error('Error al procesar el contrato:', error);
+                uiManager.showNotification(errorMessage, false, false);
             }
         };
 
+        // Limpiar formulario
         const clearForm = () => {
             formElements.contractForm.reset();
         };
 
         return {
-            lockAllFields,
+            estructuraInicial,
             lockForm,
-            lockButtons,
+            lockButtonStatus,
             unlockAllFields,
+            btnAfterBuscar,
             clearForm,
-            saveNewContract,
-            updateExistingContract,
-            handleContractNumberInput
+            createOrUpdateContract,
+            busquedaContratoCampo
         };
-    })(utils.getCookie);
+    })(
+        utils.getCookie,
+        formElements, //Necesario para estructuraInicial, lockButtonStatus, etc.
+        btnAgregar, //Necesario para estructuraInicial
+        btnActualizar, //Necesario para lockButton
+        editableFields, //Necesario para unlockEditableFields
+        lockableElements //Necesario para  estructuraInicial y unlockAllFields
+    ); // <--- Se eliminó la coma extra aquí
 
     // --- MÓDULO: GESTIÓN DEL FLUJO DE TRABAJO (WIZARD) ---
     const wizardManager = (() => {
@@ -349,19 +379,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentStep === 3) wizardElements.step3.classList.add('active');
         };
 
+        //Modo 'Crear'
         const startCreateMode = () => {
+            modoActual = 'create';
             formManager.clearForm();
             formManager.unlockAllFields();
-            formManager.lockButtons('create');
+            formManager.lockButtonStatus('create');
             uiManager.showNotification('Modo de creación habilitado. Llene el formulario para continuar.', false, true);
             updateProgress(2);
             updateSteps(2);
         };
 
+        //Modo 'Actualizar'
         const startUpdateMode = () => {
+            modoActual = 'update';
             formManager.clearForm();
-            formManager.lockForm(false);
-            formManager.lockButtons('update');
+            formManager.lockForm(false); // Bloquea todo excepto contractNumber
+
+            // Bloqueamos explícitamente los botones de función hasta que se encuentre el contrato.
+            formManager.lockButtonStatus('update');
+
             uiManager.showNotification('Modo de actualización habilitado. Ingrese el número de contrato.', false, true);
             updateProgress(2);
             updateSteps(2);
@@ -373,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const resetWizard = () => {
+            modoActual = null; //Se resetea el modo
             updateProgress(1);
             updateSteps(1);
         };
@@ -522,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             uiManager.showNotification('Cargando proveedores...', true, false);
             try {
                 const offset = currentPage * limit;
-                let url = `/obtener_proveedores/?offset=${offset}&limit=${limit}`;
+                let url = `obtener_proveedores/?offset=${offset}&limit=${limit}`;
                 if (currentSearchTerm) {
                     url += `&search=${encodeURIComponent(currentSearchTerm)}`;
                 }
@@ -554,7 +592,12 @@ document.addEventListener('DOMContentLoaded', () => {
     formElements.contractNumberInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            formManager.handleContractNumberInput();
+
+            if (modoActual === 'update') {
+                formManager.busquedaContratoCampo();
+            } else if (modoActual === 'create') {
+                uiManager.showNotification('Ocurrió un error al guardar el nuevo contrato.', false, false)
+            }
         }
     });
 
@@ -565,24 +608,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (formElements.btnGuardar) {
-        formElements.btnGuardar.addEventListener('click', (event) => {
-            event.preventDefault();
-            formManager.saveNewContract();
+    // Hace la revisión de los campos, quitando la importancia con el btnGuardar
+    if (formElements.contractForm) {
+        formElements.contractForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevenimos el envío final (para usar fetch)
+
+            if (!modoActual) {
+                uiManager.showNotification('Debe seleccionar el modo Crear o Actualizar primero.', false, false);
+                return;
+            }
+
+            // ... Nueva Validación de Proveedor ... (Zuny)
+            const providerId = document.getElementById('providerId').value.trim();
+            const providerName = document.getElementById('provider').value.trim();
+
+            if (providerId === '' || providerName === '') {
+                uiManager.showNotification('Debe seleccionar un Proveedor utilizando el botón "Proveedores" en el menú de Funciones.', false, false);
+                return; // Detiene la ejecución si falta el proveedor
+            }
+
+            // Si llegamos aquí, ¡el formulario es válido y tiene un modo seleccionado!
+            formManager.createOrUpdateContract(modoActual);
         });
     }
 
     if (btnActualizar) {
         btnActualizar.addEventListener('click', (event) => {
             event.preventDefault();
-            formManager.updateExistingContract();
-        });
-    }
-
-    if (formElements.btnLimpiar) {
-        formElements.btnLimpiar.addEventListener('click', (event) => {
-            event.preventDefault();
-            formManager.clearForm();
+            wizardManager.startUpdateMode();
         });
     }
 
@@ -638,5 +691,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar los módulos
     uiManager.init();
     wizardManager.init();
-    formManager.lockAllFields();
+    formManager.estructuraInicial();
 });
