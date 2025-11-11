@@ -188,7 +188,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Desbloquar todos los campos
         const unlockAllFields = () => {
             formElements.allFormInputs.forEach(element => {
-                element.disabled = false;
+                // Obtenemos el ID del elemento para una verificación condicional
+                const elementId = element.id;
+
+                // Lógica de EXCLUSIÓN
+                if (elementId === 'providerId' || elementId === 'provider') {
+                    // Se mantienen deshabilitados (o de solo lectura)
+                    element.disabled = true;
+                } else {
+                    // El resto de los campos se habilitan
+                    element.disabled = false;
+                }
             });
 
             // Se habilitan los btn de (Guardar, Limpiar, y de menú de funciones)
