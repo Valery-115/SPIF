@@ -19,15 +19,6 @@ class Contrato(models.Model): #Modelo para gestionar contratos con proveedores
         verbose_name="ID_proveedor"
     )
     
-    proveedor = models.ForeignKey(
-        'Proveedor',
-        on_delete=models.CASCADE,
-        default='Shoto',
-        max_length=200, 
-        related_name='Contratos_name_Prov',
-        verbose_name="f-Nombre del Proveedor"
-        )
-    
     descripcion = models.TextField(
         verbose_name="Descripción"
         )
@@ -117,10 +108,9 @@ class Contrato(models.Model): #Modelo para gestionar contratos con proveedores
         verbose_name="Tipo_2"
     )
     
-    #Es para definir la vista en como se vera en Admin
-    #Pero es mejor difinirlo en admin.py
+    #Para definir la vista en como se vera en Admin es en admin.py
     def __str__(self):
-        return f'Contrato {self.numero_contrato} - {self.proveedor}'
+        return f'Contrato {self.numero_contrato}'
 
 #Modelo para representar a los Proveedores
 class Proveedor(models.Model):
@@ -168,7 +158,6 @@ class Proveedor(models.Model):
         verbose_name="Tipo de Contrato"
     )
     
-    #Es para definir la vista en como se vera en Admin
-    #Pero es mejor difinirlo en admin.py
+    #Para definir la vista en como se vera en Admin es en admin.py
     def __str__(self):
         return f'Proveedor {self.id_proveedor} - {self.proveedor}'

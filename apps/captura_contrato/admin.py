@@ -8,7 +8,7 @@ from .models import Contrato, Proveedor
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
     #Definir que columnas son visibles en la BD de Admin.
-    list_display=['numero_contrato', 'proveedor']
+    list_display=['numero_contrato', 'id_proveedor']
 
 #Basic
 #admin.site.register(Proveedor)
@@ -16,4 +16,4 @@ class ContratoAdmin(admin.ModelAdmin):
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
     #Definir que columnas son visibles en la BD de Admin.
-    list_display=['id_proveedor', 'proveedor']
+    list_display=['id_proveedor', 'proveedor', 'fecha_baja']

@@ -19,7 +19,7 @@ def user_logout(request):
 # --- Carga la pestaña captura_contratos --- (Para cargar el template al ingresar en la URL)
 class pestaña_captura_contratos(TemplateView):
     # Para indicar, que si se entra a esta clase en el URL, cargue está plantilla
-    template_name = 'captura_contrato.html'
+    template_name = 'pruebaC.html'
     
 # --- Busca el contrato especifico para actualizar los datos ---
 class buscar_contrato(View):
@@ -35,7 +35,7 @@ class buscar_contrato(View):
             #de los campos del modelo a los IDs de los inputs HTML
             datos_contrato = {
                 'providerId': contrato.id_proveedor.id_proveedor,
-                'provider': contrato.proveedor.proveedor,
+                'provider': contrato.id_proveedor.proveedor,
                 'description': contrato.descripcion,
                 'initialAmount': contrato.monto_inicial,
                 'amount': contrato.importe,
@@ -68,7 +68,7 @@ class update_contrato(View):
             
             # 2. Obtener el identificador del Contrato y del Proveedor desde los datos JSON
             numero_contrato = data.get('contractNumber')
-            id_proveedor = data.get('providerId')
+            id_proveedor = data.get('id_proveedor')
             
             if not numero_contrato:
                 # Error si no se encuentra el contrato a update (400 = Petición del usuario invalida)
@@ -81,7 +81,6 @@ class update_contrato(View):
             # 4. Asignar llaver foraneas y campos (Update controlada)  
             # Asigna el objeto Proveedor a la clave foránea
             contrato.id_proveedor = proveedor_obj
-            contrato.proveedor = proveedor_obj
                 
             # Actualizar los campos del modelo con los datos recibidos (Solo se actualizan los de la lista)
             contrato.descripcion = data.get('description', contrato.descripcion)
@@ -114,13 +113,17 @@ def crear_contrato(request):
             data = json.loads(request.body)
             
             #Validar que el proveedor exista
-            id_proveedor = data.get('providerId')
-            proveedor_obj = Proveedor.objects.get(id_proveedor=id_proveedor)
+            id_provider = data.get('id_proveedor')
+            
+            if not id_provider:
+                return JsonResponse({'Mensaje:':'El campo de Prov ID, es obligatorio'},status = 400)
+            
+            proveedor_obj = Proveedor.objects.get(id_proveedor=id_provider)
             
             #Crear la instancia/objeto del modelo New Contract
             nuevo_contrato = Contrato(
                 numero_contrato = data.get('contractNumber'),
-                id_proveedor = proveedor_obj, #Asigna el objeto Proveedor, no solo el ID
+                id_proveedor = proveedor_obj, #Asigna el objeto Proveedor
                 descripcion = data.get('description'),
                 monto_inicial = data.get('initialAmount'),
                 importe = data.get('amount'),
