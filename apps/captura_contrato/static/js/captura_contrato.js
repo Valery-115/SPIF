@@ -279,33 +279,50 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Modo 'Crear' o 'Actualizar' en uno
-        const createOrUpdateContract = async (mode) => { // Recibe el modo como argumento
+        const createOrUpdateContract = async (mode) => {
+            // 1. OBTENER Y VALIDAR NÚMERO DE CONTRATO (Necesario para el modo 'update')
             const contractNumber = formElements.contractNumberInput.value.trim();
             if (mode === 'update' && !contractNumber) {
                 uiManager.showNotification('Debe buscar un contrato para actualizar.', false, false);
                 return;
             }
 
-            // Obtener datos del formulario (la misma lógica para ambos modos)
+            // 2. OBTENER Y VALIDAR ID DE PROVEEDOR (Necesario para la Creación/Actualización)
+            const proveedorId = document.getElementById('providerId').value.trim();
+            if (!proveedorId) {
+                // Validación para evitar el envío de "" que causa el error de tipo de dato en Django
+                uiManager.showNotification('Debe seleccionar un proveedor.', false, false);
+                return;
+            }
+
+            // 3. OBTENER DATOS DEL FORMULARIO
             const contractData = {
                 contractNumber: contractNumber,
-                description: document.getElementById('description').value,
-                fund: document.getElementById('fund').value,
-                contractDate: document.getElementById('contractDate').value,
-                endDate: document.getElementById('endDate').value,
-                status: document.getElementById('status').value,
-                type: document.getElementById('type').value,
-                providerId: document.getElementById('providerId').value,
-                provider: document.getElementById('provider').value,
-                initialAmount: document.getElementById('initialAmount').value,
-                amount: document.getElementById('amount').value,
-                label: document.getElementById('label').value,
-                type1: document.getElementById('type1').value,
-                type2: document.getElementById('type2').value
+                description: document.getElementById('description').value.trim(),
+                fund: document.getElementById('fund').value.trim(),
+                contractDate: document.getElementById('contractDate').value.trim(),
+                endDate: document.getElementById('endDate').value.trim(),
+                status: document.getElementById('status').value.trim(),
+                type: document.getElementById('type').value.trim(),
+
+                // Usamos la variable proveedorId validada
+                id_proveedor: proveedorId,
+
+                //provider: document.getElementById('provider').value.trim(),
+                initialAmount: document.getElementById('initialAmount').value.trim(),
+                amount: document.getElementById('amount').value.trim(),
+                label: document.getElementById('label').value.trim(),
+                type1: document.getElementById('type1').value.trim(),
+                type2: document.getElementById('type2').value.trim()
             };
 
+            // DEBUGGING (Temporal: Puedes dejar estos logs si aún estás depurando)
+            console.log('ID de Proveedor a enviar:', proveedorId);
+            console.log('Nombre del Proveedor que se manda:', contractData.provider);
+
+            // 4. PREPARAR Y EJECUTAR FETCH
             const isUpdate = mode === 'update';
-            const endpoint = isUpdate ? `/captura_contrato/actualizar_contrato/` : '/crear_contrato/';
+            const endpoint = isUpdate ? `/captura_contrato/actualizar_contrato/` : '/captura_contrato/crear_contrato/';
             const method = isUpdate ? 'PUT' : 'POST';
             const loadingMessage = isUpdate ? 'Guardando cambios...' : 'Guardando nuevo contrato...';
             const successMessage = isUpdate ? '¡Cambios guardados exitosamente!' : '¡Contrato guardado exitosamente!';
@@ -331,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 uiManager.showNotification(successMessage, false, true);
                 clearForm();
                 estructuraInicial();
-                wizardManager.resetWizard(); // Esto también resetea modoActual
+                wizardManager.resetWizard();
             } catch (error) {
                 console.error('Error al procesar el contrato:', error);
                 uiManager.showNotification(errorMessage, false, false);
@@ -360,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnActualizar, //Necesario para lockButton
         editableFields, //Necesario para unlockEditableFields
         lockableElements //Necesario para  estructuraInicial y unlockAllFields
-    ); // <--- Se eliminó la coma extra aquí
+    );
 
     // --- MÓDULO: GESTIÓN DEL FLUJO DE TRABAJO (WIZARD) ---
     const wizardManager = (() => {
@@ -521,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const handleTableClick = (event) => {
+        const ClickTableProvider = (event) => {
             const row = event.target.closest('tr');
             if (row && row.dataset.proveedorId) {
                 const proveedorId = row.dataset.proveedorId;
@@ -583,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             renderTableStructure,
             fetchProveedores,
-            handleTableClick,
+            ClickTableProvider,
             resetTable,
         };
     })();
@@ -686,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Delegación de eventos para la tabla de proveedores
-    tableProveedoresContainer.addEventListener('click', tableManager.handleTableClick);
+    tableProveedoresContainer.addEventListener('click', tableManager.ClickTableProvider);
 
     // Inicializar los módulos
     uiManager.init();

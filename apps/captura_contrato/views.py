@@ -19,7 +19,7 @@ def user_logout(request):
 # --- Carga la pestaña captura_contratos --- (Para cargar el template al ingresar en la URL)
 class pestaña_captura_contratos(TemplateView):
     # Para indicar, que si se entra a esta clase en el URL, cargue está plantilla
-    template_name = 'pruebaC.html'
+    template_name = 'captura_contrato.html'
     
 # --- Busca el contrato especifico para actualizar los datos ---
 class buscar_contrato(View):
