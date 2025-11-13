@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 
 #BD del Servidor
 
-if not DEBUG: 
+if not BD_Try: 
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
