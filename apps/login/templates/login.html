@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label for="password">Contraseña:</label>
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Constraseña">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Constraseña" required>
                     <img src="{% static 'img/mostrar.png' %}" alt="Mostrar contraseña" id="togglePassword">
                     {% if form.password.errors %}
                     <div class="errorlist">{{ form.password.errors }}</div>

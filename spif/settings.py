@@ -26,6 +26,7 @@ SECRET_KEY = ')$!2i4a9#01ek#n!0ya+$)jo-=s#*$v=v5kr-xd24r5lzo44hi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+BD_Try: True
 
 ALLOWED_HOSTS = ['10.236.62.44', '127.0.0.1']
 
@@ -80,24 +81,25 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 #BD del Servidor
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spif',
-        'USER': 'spif_user',
-        'PASSWORD': 'temporal',
-        'HOST': '10.236.62.44',
-        'PORT': '5434',
+
+if not DEBUG: 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'spif',
+            'USER': 'spif_user',
+            'PASSWORD': 'temporal',
+            'HOST': '10.236.62.44',
+            'PORT': '5434',
+        }
     }
-}
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

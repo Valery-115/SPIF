@@ -1037,25 +1037,135 @@ body.collapsed .toggle-tab {
 /* ------------------- Estilos de impresión ------------------- */
 @media print {
 
-    .notification,
-    .toggle-tab,
+    /* ========================================================== */
+    /* 1. Ocultar elementos en la Impresión y la barra vertical */
+    /* ========================================================== */
+    .header,
+    /* Oculta el encabezado de "Bienvenido, Usuario!" */
     .sidebar,
+    /* Oculta el menú lateral (Len) */
+    .toggle-tab-btn,
+    /* Oculta la pestaña para expandir Len*/
     .right-menu,
+    /* Oculta el panel de botones (Agregar, Actualizar, etc.) {Rin} */
+    #notification,
+    /* Oculta los mensajes de notificación */
+    .wizard-container,
+    /* Oculta el wizard de pasos (Elección de Función, Llenado, Guardado) */
     .btn-container,
-    .proveedores-panel {
-        display: none !important;
+    /* Oculta los btn */
+    /* Esconder iconos dentro de los form-group (como fa-user, fa-lock, etc.) */
+    .section-title i,
+    .form-group i,
+    .dgic-container {
+        /* Oculta cualquier pie de página global */
+        display: none;
     }
 
-    @page {
-        margin: 1cm;
+    /* Para que se expanda de manera vertical y sin pestaña*/
+    .main-content {
+        height: auto;
+        width: 100% !important;
+    }
+
+    /* ======================================================= */
+    /* 2. Colores de Fondo y Bordes de la Impresión */
+    /* ======================================================= */
+    body {
+        background-color: white;
+        /* Fondo blanco para la impresión */
+        background-image: none;
+        /* Quitar imagen de fondo */
+    }
+
+    .header-btn,
+    .header-btn h1,
+    .container,
+    .section-title,
+    .form-group label,
+    .form-group label.required::after,
+    .form-group label i {
+        /* Ajusta los selectores a tus clases HTML */
+        background-color: transparent;
+        border: none;
+    }
+
+    #contractForm {
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+    }
+
+    #contractForm input:not([type="submit"]),
+    #contractForm select,
+    #contractForm textarea {
+        border: none;
+        background-color: transparent;
+    }
+
+    .form-group {
+        background-color: transparent;
+    }
+
+    /* ======================================================== */
+    /* 3. Tamaño de Texto y Linea */
+    /* ======================================================== */
+    .header-btn,
+    .header-btn h1,
+    .container,
+    .section-title,
+    .form-group label,
+    .form-group label.required::after,
+    .form-group label i {
+        color: black;
+        box-shadow: none;
+    }
+
+    /* Tamaño de Titulo */
+    .header-btn h1 {
+        font-size: 25pt;
+    }
+
+    /* Tamaño del Sub-Titulo */
+    .section-title {
+        font-size: 20pt;
     }
 
     .main-content {
-        transform: scale(0.9);
-        transform-origin: top center;
-        width: 100% !important;
-        margin-left: 0 !important;
-        box-sizing: border-box;
+        /* Tamaño de los titulos de los campos */
+        font-size: 18pt;
+    }
+
+    /* Estilo para los inputs como líneas para lectura */
+    #contractForm input:not([type="submit"]),
+    #contractForm select,
+    #contractForm textarea {
+        border-bottom: 0.1px solid black;
+        /* Línea inferior sutil */
+        color: black;
+        /* Tamaño de los Imputs */
+        font-size: 15pt;
+    }
+
+    /* ==================================================== */
+    /* 4. Acomodar los espacios de la Impresión */
+    /* ==================================================== */
+    /* Que todos los elementos del contenedor principal no tengan espacio */
+    .container {
+        padding: 0;
+    }
+
+    /* Solo el contenedor del Titulo del contenedor princiapl, no tiene espacio*/
+    .header-btn {
+        padding: 0;
+    }
+
+    /* Espacio en los imput de los formularios */
+    #contractForm input:not([type="submit"]),
+    #contractForm select,
+    #contractForm textarea {
+        padding: 5pt;
+        padding-top: 3pt;
     }
 }
 
