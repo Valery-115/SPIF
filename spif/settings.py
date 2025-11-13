@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -25,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ')$!2i4a9#01ek#n!0ya+$)jo-=s#*$v=v5kr-xd24r5lzo44hi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['10.236.62.44', '127.0.0.1']
 
@@ -80,16 +80,37 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 #BD del Servidor
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spif',
-        'USER': 'spif_user',
-        'PASSWORD': 'temporal',
-        'HOST': '10.236.62.44',
-        'PORT': '5434',
+if not DEBUG:
+    # BD del Servidor (PostgreSQL) - Lee los valores del entorno
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DB', 'spif'),
+            'USER': os.environ.get('POSTGRES_USER', 'spif_user'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'temporal'),
+            'HOST': os.environ.get('POSTGRES_HOST', '10.236.62.44'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5434'),
+        }
     }
-}
+else:
+    # BD Local (SQLite3)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'spif',
+#        'USER': 'spif_user',
+#        'PASSWORD': 'temporal',
+#        'HOST': '10.236.62.44',
+#        'PORT': '5434',
+#    }
+#}
 
 #DATABASES = {
 #    'default': {
