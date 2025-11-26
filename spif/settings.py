@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+# Es la función de carga para que el sevidor corra el entorno (.env) sin ver los datos en el código
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,11 +81,14 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-#BD del Servidor
+# Llamar a la función para que lea el archivo .env (Servidor)
+load_dotenv()
+
+#BD del Servidor (Asegurarse de que se lean TODAS las Variables de Entorno)
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'spif'),
+        'NAME': os.environ.get('POSTGRES_DB'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': os.environ.get('POSTGRES_HOST'),
