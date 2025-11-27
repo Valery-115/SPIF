@@ -138,7 +138,7 @@ class Proveedor(models.Model):
         null=True
     )
     
-    rfc_prueba = models.CharField(
+    rfc = models.CharField(
         max_length=20,
         null=True
     )
