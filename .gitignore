@@ -28,7 +28,7 @@ db.sqlite3
 # Archivo de base de datos local
 /media/               
 # Archivos subidos por los usuarios
-
+.env
 
 # --------------------
 # 4. Archivos de Django y SO
