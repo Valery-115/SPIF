@@ -126,7 +126,8 @@ class Proveedor(models.Model):
         decimal_places=0,
         null=True
     )
-    
+
+    #nombre_proveedor = models.CharField(    
     proveedor = models.CharField(
         max_length=100,
         null=True, 
@@ -362,6 +363,7 @@ class Proveedor(models.Model):
         max_length=35,
         null=True
     )
+    
     
     curp = models.CharField(
         max_length=20,
