@@ -1,0 +1,47 @@
+# --------------------
+# 1. Archivos de Python
+# --------------------
+__pycache__/          
+# Carpetas de caché de Python
+*.pyc                 
+# Archivos de bytecode
+*.pyd
+*.so
+.env                  
+# Archivos de variables de entorno (¡Contienen claves secretas!)
+
+# --------------------
+# 2. Entorno Virtual (venv)
+# --------------------
+.venv/                
+# Carpeta de entorno virtual (la que usas para 'activate')
+venv/
+env/
+/bin/
+/lib/
+/include/
+
+# --------------------
+# 3. Bases de Datos y Media
+# --------------------
+db.sqlite3            
+# Archivo de base de datos local
+/media/               
+# Archivos subidos por los usuarios
+.env
+# Archivo de Excel
+~$*
+*.xlsx#
+*.xls#
+# Carpeta de los datos respalados
+/fixtures/
+
+# --------------------
+# 4. Archivos de Django y SO
+# --------------------
+*~                    
+# Archivos de respaldo de editores (emacs, vim)
+.DS_Store             
+# Archivos de Mac OS X
+.vscode/              
+# Configuraciones de Visual Studio Code (opcional, si es personal)

@@ -1,0 +1,498 @@
+/*Iconos https://fontawesome.com/icons/scroll?f=classic&s=solid*/
+@font-face {
+    font-family: 'GOTHAM BOLD';
+    src: url('/static/fonts/GOTHAM BOLD.OTF') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM LIGHT';
+    src: url('/static/fonts/GOTHAM LIGHT.OTF') format('opentype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM BOOK';
+    src: url('/static/fonts/GOTHAM-BOOK.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gris: #e5e5e6;
+    --azul: #003257;
+    --guinda: #831f46;
+    --degradado: #525B68;
+    --btn: #353535;
+    --error: #d10011;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'GOTHAM BOLD', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    /* Memo */
+    background-image: url('/static/img/Fondo.png');
+    /* Elimiar el SCROLL */
+    overflow-y: hidden;
+}
+
+/* -------------------
+Barra lateral (Menú Izquierdo)
+------------------- */
+.sidebar {
+    width: 250px;
+    background-color: var(--guinda);
+    color: var(--btn);
+    height: 100%;
+    position: fixed;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    height: 125px;
+    border-bottom: 1px solid white;
+    align-content: center;
+}
+
+.sidebar-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+}
+
+.sidebar-menu {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    /* meemo --btn */
+    color: var(--gris);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+.sidebar-menu li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    /* meemo --btn */
+    color: var(--gris);
+    transition: color 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover i {
+    color: var(--guinda);
+}
+
+/* Submenús */
+.has-submenu>a {
+    justify-content: space-between;
+}
+
+.submenu {
+    list-style: none;
+    /* meemo white*/
+    background-color: var(--guinda);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu.active {
+    max-height: 450px;
+}
+
+.submenu li a {
+    padding: 10px 25px 10px 50px;
+    font-size: 0.95em;
+    /* meemo --btn*/
+    color: var(--gris);
+}
+
+.submenu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+/* Estilos para el segundo nivel de submenú */
+.submenu-toggle-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.submenu-2 {
+    list-style: none;
+    /* meemo white*/
+    background-color: var(--guinda);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-left: 15px;
+    /* Indentación adicional para el tercer nivel */
+}
+
+.submenu-2.active {
+    max-height: 450px;
+    /* O un valor lo suficientemente grande para contener los elementos */
+}
+
+.submenu-2 li a {
+    padding: 8px 25px 8px 65px;
+    /* Más padding para indentación */
+    font-size: 0.9em;
+}
+
+.arrow-2 {
+    transition: transform 0.3s ease;
+}
+
+/* Cambia la flecha cuando el submenú se abre */
+.arrow-2.rotated {
+    transform: rotate(90deg);
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+    color: var(--btn);
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    /* meemo white */
+    border-top: 1px solid white;
+    height: 140px;
+    align-content: center;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    /* meemo --btn*/
+    color: var(--gris);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+    background-color: var(--error);
+    color: white;
+}
+
+.logout-btn i {
+    margin-right: 15px;
+}
+
+/* Contenido principal */
+.main-content {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 0 40px 0;
+    padding-top: 15px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px 17px;
+    background-color: rgba(255, 255, 255, 0.692);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    /* X, Y, Capacidad, RGB, Opacidad*/
+    border-radius: 12px;
+    margin: 10px 0 30px;
+}
+
+.page-title {
+    font-size: 2rem;
+    color: var(--azul);
+    font-weight: 500;
+}
+
+.user-info span {
+    font-size: 1rem;
+    color: var(--guinda);
+    font-weight: 400;
+}
+
+/*************CONTENEDOR DE BOTONES*********************/
+.container {
+    /* Memo background-color: #f8f8f8;*/
+    background-color: rgba(255, 255, 255, 0.692);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    padding: 35px;
+    border: 1px solid #e0e0e0;
+}
+
+.header-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px;
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--gris);
+}
+
+h1 {
+    color: var(--azul);
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--degradado);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.column-title {
+    font-size: 16px;
+    color: var(--degradado);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gris);
+    font-weight: 500;
+}
+
+.btn {
+    padding: 14px 16px;
+    border: 1px solid var(--gris);
+    border-radius: 6px;
+    border-left: 3px solid var(--azul);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: white;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    color: var(--azul);
+}
+
+.btn:hover {
+    background-color: var(--gris);
+    border-color: var(--guinda);
+    color: var(--guinda);
+}
+
+.btn:active {
+    background-color: #f1f3f5;
+}
+
+.btn i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+}
+
+/* Agregar esto a tu CSS */
+a.btn {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    text-align: left;
+    /* Mantener todas las propiedades de .btn */
+    padding: 14px 16px;
+    border: 1px solid var(--gris);
+    border-radius: 6px;
+    border-left: 3px solid var(--azul);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: white;
+    color: var(--azul);
+}
+
+a.btn:hover {
+    background-color: var(--gris);
+    border-color: var(--guinda);
+    color: var(--guinda);
+    text-decoration: none;
+}
+
+a.btn i {
+    margin-right: 12px;
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--degradado);
+    font-size: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+/* Nuevo diseño para el contenedor de imágenes */
+.dgic-container {
+    background-color: rgba(255, 255, 255, 0.692);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    /* X, Y, Capacidad, RGB, Opacidad*/
+    display: flex;
+    /* Usamos Flexbox para alinear elementos */
+    justify-content: center;
+    /* Centra los elementos horizontalmente */
+    align-items: center;
+    /* Centra los elementos verticalmente */
+    gap: 10rem;
+    /* Espacio entre las imágenes */
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    /* Espacio superior para separarlo del contenido de arriba */
+    margin-bottom: 1rem;
+}
+
+.dgic-container p {
+    display: flex;
+    text-align: center;
+}
+
+.dgic-container span {
+    align-content: center;
+    padding-right: 0.5rem;
+    color: #282d33;
+}
+
+.dgic-container img {
+    height: 4rem;
+    /* Tamaño fijo de las imágenes para consistencia */
+    object-fit: contain;
+    /* Asegura que la imagen se ajuste sin distorsionarse */
+    opacity: 0.8;
+    /* Ligeramente transparente para un aspecto más formal */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    /* Transición suave para los efectos */
+}
+
+.dgic-container .big {
+    height: 3rem;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 1200px) {
+
+    .page-title {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .user-info span {
+        font-size: 0.9rem;
+    }
+
+    .sidebar-header {
+        height: 90px;
+    }
+
+    .header {
+        padding: 20px;
+    }
+
+    .sidebar-footer {
+        height: 120px;
+    }
+
+    .dgic-container {
+        gap: 3rem;
+    }
+
+    .dgic-container .big {
+        height: 2rem;
+    }
+
+    .dgic-container p {
+        font-size: 0.8rem;
+    }
+
+    .dgic-container span {
+        width: 40%;
+    }
+
+    .dgic-container img {
+        height: 2.5rem;
+        /* Tamaño fijo de las imágenes para consistencia */
+    }
+}
+
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .dgic-container {
+        flex-direction: column;
+        /* Apila las imágenes verticalmente en pantallas pequeñas */
+        gap: 20px;
+        /* Reduce el espacio entre las imágenes */
+    }
+
+    .dgic-container img {
+        height: 60px;
+        /* Reduce el tamaño de las imágenes para pantallas más pequeñas */
+    }
+}

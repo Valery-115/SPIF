@@ -1,0 +1,338 @@
+@font-face {
+    font-family: 'GOTHAM BOLD';
+    src: url('/static/fonts/GOTHAM BOLD.OTF') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM LIGHT';
+    src: url('/static/fonts/GOTHAM LIGHT.OTF') format('opentype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM BOOK';
+    src: url('/static/fonts/GOTHAM-BOOK.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gris: #e5e5e6;
+    --azul: #003257;
+    --guinda: #831f46;
+    --degradado: #525B68;
+    --btn: #7a001f;
+    --error: #d10011;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'GOTHAM BOLD', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /*Apila lpos elementos verticalmente*/
+    justify-content: flex-start;
+    /*Centra los elementos horizontalmente*/
+    align-items: center;
+    /*Centra los elementos verticalmente*/
+    min-height: 100vh;
+    padding: 20px;
+    background-image: url('/static/img/Fondo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    /* Agregamos el fondo para evitar que se vea la imagen de fondo detrás del body */
+    background-attachment: fixed;
+}
+
+.space-container {
+    display: flex;
+    width: 90%;
+    /* Usa un porcentaje para que el contenedor ocupe la mayor parte de la pantalla */
+    max-width: 1000px;
+    /* Establece un ancho máximo para evitar que se vea demasiado grande en pantallas muy amplias */
+    height: auto;
+    /*Convierte el contenerdor en un contenedor Flex*/
+    justify-content: center;
+    /*Centra los elementos horizontalmente*/
+    align-items: center;
+    /*Asegura que los hijos tengan la misma altura*/
+    margin-top: 3%;
+}
+
+.image-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    height: 100rem;
+    max-height: 68vh;
+    background-color: white;
+    box-shadow: 5px 10px 25px rgb(0, 0, 0);
+    border-radius: 12px;
+    padding: 30px;
+}
+
+.image-container img {
+    object-fit: contain;
+    /* Esta propiedad es clave para que la imagen se estire sin distorsionarse */
+    width: 100%;
+    border-radius: 12px;
+}
+
+.login-container {
+    flex: 1;
+    width: auto;
+    height: 100rem;
+    max-height: 68vh;
+    background: linear-gradient(90deg, var(--guinda) 0%, var(--degradado) 100%);
+    border-radius: 12px;
+    box-shadow: 5px 10px 25px rgb(0, 0, 0);
+    padding: 30px;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease-out;
+    justify-items: center;
+}
+
+.login-logo {
+    display: flex;
+    height: 7.5rem;
+    width: auto;
+    padding: 1rem 0.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-header {
+    color: white;
+    padding: 25px 25px 10px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.login-subtitle {
+    color: rgb(161, 161, 161);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: white;
+}
+
+/* Hector */
+.form-group i {
+    position: absolute;
+    left: 12px;
+    top: 65%;
+    transform: translateY(-50%);
+    color: var(--guinda);
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    /* Hector */
+    padding: 12px 30px;
+    border: 3px solid var(--gris);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    background: var(--btn);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    /* Hector */
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    background: #5a0018;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Hector (Size para el btn con el brillo) */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+/* Hector (El brillo pasa por todo el botón)*/
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Hector (Para evitar la recarga a la web al darle click al btn) */
+.btn.loading {
+    pointer-events: none;
+}
+
+/* Hector (Icono de carga animada) */
+.btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.errorlist {
+    list-style: none;
+    border-radius: 8px;
+    background-color: white;
+    color: var(--error);
+    font-size: 0.9rem;
+    padding: 1px 5px;
+    margin: 0.5rem;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.form-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+#togglePassword {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 24px;
+    cursor: pointer;
+}
+
+.logo-container {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.logo-container p {
+    display: flex;
+}
+
+.logo-container span {
+    align-content: center;
+    padding-top: 4rem;
+    padding-right: 0.5rem;
+    color: #282d33;
+}
+
+.logo-container img {
+    width: 200px;
+    /* Asegura que cada imagen ocupe el ancho de su columna */
+    height: auto;
+    /* Asegura que cada imagen ocupe la altura de su fila */
+    object-fit: cover;
+    /* Recorta la imagen para que llene completamente el contenedor sin distorsionarse */
+    padding-top: 5rem;
+}
+
+.logo-space {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 5%;
+    /* Espacio entre los items */
+}
+
+/* Media Query for smaller screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .space-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding-top: 1rem;
+    }
+
+    .logo-container span {
+        width: 8rem;
+        font-size: 0.8rem;
+        padding: 0 0.5rem;
+    }
+
+    .logo-container img {
+        width: 60%;
+        padding-top: 1rem;
+        background-color: white;
+    }
+
+    .logo-space {
+        display: block;
+        width: 80%;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+}

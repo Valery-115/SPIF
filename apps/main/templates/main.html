@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIF | Menú Principal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/Logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menú Principal</h2>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li class="has-submenu">
+                    <a href="#" class="submenu-toggle">
+                        <i class="fas fa-scroll"></i> Contratos
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="has-submenu">
+                            <a href="#" class="submenu-toggle-2">Archivo
+                                <i class="fas fa-chevron-right arrow-2"></i>
+                            </a>
+                            <ul class="submenu-2">
+                                <li><a href="{% url 'captura_contrato' %}">Captura</a></li>
+                                <li><a href="#">Adiciones</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="submenu-toggle-2">Reportes
+                                <i class="fas fa-chevron-right arrow-2"></i>
+                            </a>
+                            <ul class="submenu-2">
+                                <li><a href="#">General</a></li>
+                                <li><a href="#">Adiciones</a></li>
+                                <li><a href="#">Pagado</a></li>
+                                <li><a href="#">Pagado por Cuenta</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="has-submenu">
+                    <a href="#" class="submenu-toggle">
+                        <i class="fas fa-handshake"></i> Oficios
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="has-submenu">
+                            <a href="#" class="submenu-toggle-2">Archivo
+                                <i class="fas fa-chevron-right arrow-2"></i>
+                            </a>
+                            <ul class="submenu-2">
+                                <li><a href="#">Oficios de Aprobación</a></li>
+                                <li><a href="#">Obras</a></li>
+                                <li><a href="#">Selección de Pago</a></li>
+                                <li><a href="#">Estimaciones</a></li>
+                                <li><a href="#">Recursos FISM</a></li>
+                                <li><a href="#">Enviar Estimaciones</a></li>
+                                <li><a href="#">Cheques</a></li>
+                                <li><a href="#">Pagos</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="submenu-toggle-2">Consultar
+                                <i class="fas fa-chevron-right arrow-2"></i>
+                            </a>
+                            <ul class="submenu-2">
+                                <li><a href="#">Estimaciones Enviadas</a></li>
+                                <li><a href="#">Formatos</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="submenu-toggle-2">Reportes
+                                <i class="fas fa-chevron-right arrow-2"></i>
+                            </a>
+                            <ul class="submenu-2">
+                                <li><a href="#">Analisis Financiero</a></li>
+                                <li><a href="#">Pagos x Contrato</a></li>
+                                <li><a href="#">Contado x Recurso</a></li>
+                                <li><a href="#">Pagos x Obra</a></li>
+                                <li><a href="#">Pagos x Proveedor</a></li>
+                                <li><a href="#">Por Cuenta</a></li>
+                                <li><a href="#">Por Proyecto</a></li>
+                                <li><a href="#">Oficios</a></li>
+                                <li><a href="#">Ptt vs Oficios</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Sistema de Procesamiento de Información Financiera</h1>
+            <div class="user-info">
+                {% if user.is_authenticated %}
+                <span>¡Bienvenido, {{ user.username }}!</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="header-btn">
+                <h1>Panel de Gestión de Proyectos y Tesorería</h1>
+                <p class="subtitle">Sistema de operación integral - v0.0.1</p>
+            </div>
+
+            <div class="button-container">
+                <div class="column">
+                    <div class="column-title">Gestión y Registro de Proyectos
+                    </div>
+                    <a href="{% url 'captura_contrato' %}" class="btn btn-left">
+                    <i class="fas fa-scroll"></i>Captura de Contratos
+                    </a>
+                    <button class="btn btn-left">
+                        <i class="fas fa-handshake"></i>Oficios de Aprobación
+                    </button>
+                    <button class="btn btn-left">
+                        <i class="fas fa-city"></i>Obras
+                    </button>
+                    <button class="btn btn-left">
+                        <i class="fas fa-file-invoice-dollar"></i>Estimaciones
+                    </button>
+                    <button class="btn btn-left">
+                        <i class="fas fa-network-wired"></i>Recursos FISM
+                    </button>
+                </div>
+
+                <div class="column">
+                    <div class="column-title">Control y Administración Financiera</div>
+                    <button class="btn btn-right">
+                        <i class="fas fa-comments-dollar"></i>Envio de Estimaciones
+                    </button>
+                    <button class="btn btn-right">
+                        <i class="fas fa-money-check"></i>Cheques
+                    </button>
+                    <button class="btn btn-right">
+                        <i class="fas fa-hand-holding-dollar"></i>Pagos
+                    </button>
+                    <button class="btn btn-right">
+                        <i class="fas fa-file"></i>Formatos
+                    </button>
+                    <button class="btn btn-right">
+                        <i class="fas fa-file-invoice"></i>Oficios
+                    </button>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>© 2025 Sistema Municipal. Todos los derechos reservados.</p>
+            </div>
+        </div>
+
+        <div class="dgic-container">
+            <img src="{% static 'img/Tesoreria.png' %}" alt="Tesorería">
+            <img class="big" src="{% static 'img/Juarez.png' %}" alt="Juázres Conectado">
+            <p><span>Desarrollado por:</span>
+                <img src="{% static 'img/Dirección.png' %}" alt="DGIC">
+            </p>
+        </div>
+        <br>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

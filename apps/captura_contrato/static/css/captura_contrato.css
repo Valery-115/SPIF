@@ -1,0 +1,1283 @@
+/*
+ * ============================================
+ * Estilos Generales y Variables
+ * ============================================
+ */
+
+/*Iconos https://fontawesome.com/search?f=classic&s=solid&o=r*/
+/* ------------------- Fuentes ------------------- */
+@font-face {
+    font-family: 'GOTHAM BOLD';
+    src: url('/static/fonts/GOTHAM BOLD.OTF') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM LIGHT';
+    src: url('/static/fonts/GOTHAM LIGHT.OTF') format('opentype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GOTHAM BOOK';
+    src: url('/static/fonts/GOTHAM-BOOK.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ------------------- Variables de Color ------------------- */
+:root {
+    --gris: #e5e5e6;
+    --azul: #003257;
+    --guinda: #831f46;
+    --degradado: #525b68;
+    --btn: #353535;
+    --error: #d10011;
+}
+
+/* ------------------- Estilos del Cuerpo y Reset CSS ------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'GOTHAM BOLD', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-image: url('/static/img/Fondo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    /* Elimina el Scroll del Body */
+    overflow-y: hidden;
+}
+
+/*
+ * ============================================
+ * Estilos de Componentes Principales
+ * ============================================
+ */
+
+/* ------------------- Barra lateral (Menú Izquierdo) ------------------- */
+.sidebar {
+    width: 250px;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--guinda);
+    color: var(--btn);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    height: 125px;
+    border-bottom: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.sidebar-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.sidebar-menu {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.sidebar-menu ul {
+    list-style: none;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    /* meemo --btn */
+    color: var(--gris);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+.sidebar-menu li a i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    /* meemo --btn */
+    color: var(--gris);
+    transition: color 0.2s ease-in-out;
+}
+
+.sidebar-menu li a:hover i {
+    color: var(--guinda);
+}
+
+.sidebar-footer {
+    padding: 20px;
+    /* meemo white */
+    border-top: 1px solid white;
+    height: 140px;
+    align-content: center;
+}
+
+/* -------------------
+Botón Cerrar Sesión
+------------------- */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    /* meemo --btn*/
+    color: var(--gris);
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+    background-color: var(--error);
+    color: white;
+}
+
+.logout-btn i {
+    margin-right: 15px;
+}
+
+/* ------------------- Submenús ------------------- */
+.has-submenu>a {
+    justify-content: space-between;
+}
+
+.submenu {
+    list-style: none;
+    /* meemo white*/
+    background-color: var(--guinda);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu.active {
+    max-height: 450px;
+}
+
+.submenu li a {
+    padding: 10px 25px 10px 50px;
+    font-size: 0.95em;
+    /* meemo --btn*/
+    color: var(--gris);
+}
+
+.submenu li a:hover {
+    background-color: var(--gris);
+    color: var(--guinda);
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+    color: var(--btn);
+}
+
+.arrow.rotated {
+    transform: rotate(180deg);
+}
+
+/* Segundo nivel de submenú */
+.submenu-toggle-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.submenu-2 {
+    list-style: none;
+    /* meemo white*/
+    background-color: var(--guinda);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-left: 15px;
+}
+
+.submenu-2.active {
+    max-height: 450px;
+}
+
+.submenu-2 li a {
+    padding: 8px 25px 8px 65px;
+    font-size: 0.9em;
+}
+
+.arrow-2 {
+    transition: transform 0.3s ease;
+}
+
+.arrow-2.rotated {
+    transform: rotate(90deg);
+}
+
+/* ------------------- Menú Derecha ------------------- */
+.right-menu {
+    width: 250px;
+    /* Asegura que ocupe toda la ventana */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    color: var(--btn);
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.right-menu-header {
+    padding: 25px 20px;
+    height: 125.5px;
+    border-bottom: 1px solid var(--guinda);
+    align-content: center;
+}
+
+.right-menu-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--azul);
+    text-align: center;
+}
+
+.right-menu-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: var(--gris);
+    color: var(--azul);
+    font-size: 0.95em;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.menu-btn span {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.menu-btn:hover {
+    background-color: var(--guinda);
+    color: white;
+}
+
+.menu-btn i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+    color: inherit;
+}
+
+.right-menu-footer {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid var(--guinda);
+    height: 140px;
+    align-content: center;
+}
+
+.logo-footer {
+    width: 8.5rem;
+    height: auto;
+    opacity: 0.7;
+}
+
+/* ------------------- Contenido Principal ------------------- */
+.main-content {
+    margin-left: 250px;
+    margin-right: 250px;
+    width: calc(100% - 500px);
+    padding: 15px 40px 0;
+    /* Fija la altura del contenedor principal */
+    min-height: 100vh;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    /* Ocupa toda la altura de la ventana */
+    height: 100vh;
+    overflow-y: hidden;
+    /* Permite que los hijos (.header, .container, .dgic-container) se distribuyan verticalmente */
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 40px;
+    background-color: rgba(255, 255, 255, 0.555);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    border-radius: 12px;
+    margin: 10px 0 30px;
+    flex-shrink: 0;
+}
+
+.page-title {
+    font-size: 2rem;
+    color: var(--azul);
+    font-weight: 500;
+}
+
+.user-info span {
+    font-size: 1rem;
+    color: var(--guinda);
+    font-weight: 400;
+}
+
+/*
+ * ============================================
+ * Estilos de Componentes Secundarios
+ * ============================================
+ */
+
+/* ------------------- Contenedores y Títulos ------------------- */
+.container {
+    background-color: rgba(255, 255, 255, 0.692);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    /* Ocupa el espacio vertical restante en el 'main-content'*/
+    flex-grow: 1;
+    /* Aplica el Scroll solo al contenido del formulario */
+    overflow-y: auto;
+    /* Asegura que no se expanda más allá de lo permitido por 'flex-grow' */
+    min-height: 0;
+}
+
+.header-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 40px;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--gris);
+}
+
+.header-btn h1 {
+    text-align: center;
+    color: var(--azul);
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--azul);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--guinda);
+    padding-bottom: 10px;
+}
+
+.section-title i {
+    margin-right: 15px;
+    color: var(--guinda);
+}
+
+/* ------------------- Formularios ------------------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 0.9em;
+    color: var(--degradado);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group label.required::after {
+    content: '*';
+    color: var(--error);
+    margin-left: 5px;
+}
+
+.form-group label i {
+    margin-right: 8px;
+    color: var(--btn);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--gris);
+    border-radius: 4px;
+    font-size: 1em;
+    color: var(--btn);
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Estilo para los campos de Proveedor ID y Proveedor */
+#providerId:enabled,
+#provider:enabled,
+#providerId:focus,
+#provider:focus {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: default;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px rgb(206, 212, 218);
+}
+
+/* ------------------- Botones de Formulario ------------------- */
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+.btn-guardar,
+.btn-limpiar {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-guardar {
+    background-color: var(--azul);
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: var(--guinda);
+}
+
+.btn-limpiar {
+    background-color: var(--gris);
+    color: var(--btn);
+}
+
+.btn-limpiar:hover {
+    background-color: #d8d8d8;
+    color: var(--guinda);
+}
+
+/* ------------------- Tablas ------------------- */
+.table-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.table-actions {
+    display: flex;
+}
+
+.action-btn {
+    background-color: var(--azul);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: var(--guinda);
+}
+
+.table-wrapper {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 600px;
+}
+
+table thead tr {
+    background-color: var(--guinda);
+    color: #fff;
+    text-align: left;
+    font-weight: 600;
+}
+
+table th,
+table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--degradado);
+}
+
+table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: var(--gris);
+}
+
+table tbody tr:hover {
+    background-color: var(--degradado);
+    color: white;
+}
+
+.no-data-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* ------------------- Búsqueda ------------------- */
+.search-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid var(--gris);
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.search-container:hover {
+    border-color: var(--guinda);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 10px;
+    font-size: 14px;
+    color: var(--btn);
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+.search-icon {
+    color: var(--degradado);
+    margin-left: 10px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.search-container:hover .search-icon {
+    color: var(--guinda);
+}
+
+/* ------------------- Botón Toggle ------------------- */
+.toggle-tab {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+    transition: left 0.3s ease;
+}
+
+.toggle-tab-btn {
+    width: 40px;
+    height: 60px;
+    background-color: var(--azul);
+    color: white;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    padding: 15px 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-tab-btn:hover {
+    /* meemo --guinda*/
+    background-color: white;
+    /* meemo white*/
+    color: var(--guinda);
+    width: 45px;
+}
+
+.toggle-tab-btn i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-tab-btn.rotated i {
+    transform: rotate(180deg);
+}
+
+/* ------------------- Contenedor de Imágenes ------------------- */
+/* Nuevo diseño para el contenedor de imágenes */
+.dgic-container {
+    background-color: rgba(255, 255, 255, 0.555);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    /* X, Y, Capacidad, RGB, Opacidad*/
+    display: flex;
+    /* Usamos Flexbox para alinear elementos */
+    justify-content: center;
+    /* Centra los elementos horizontalmente */
+    align-items: center;
+    /* Centra los elementos verticalmente */
+    gap: 3rem;
+    /* Espacio entre las imágenes */
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    /* Espacio superior para separarlo del contenido de arriba */
+    margin-bottom: 1rem;
+    /* Espacio fijo */
+    flex-shrink: 0;
+}
+
+.dgic-container p {
+    display: flex;
+    text-align: center;
+}
+
+.dgic-container span {
+    align-content: center;
+    padding-right: 0.5rem;
+    color: #282d33;
+}
+
+.dgic-container img {
+    height: 4rem;
+    object-fit: contain;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dgic-container .big {
+    height: 3rem;
+}
+
+/* ------------------- Notificaciones ------------------- */
+#notification {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    padding: 15px 25px;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#notification.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: var(--error);
+}
+
+/* ------------------- Pie de Página ------------------- */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--degradado);
+    font-size: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gris);
+}
+
+/*
+ * ============================================
+ * Estilos del Wizard
+ * ============================================
+ */
+
+/* ------------------- Contenedor y Pasos ------------------- */
+.wizard-container {
+    width: 100%;
+    max-width: 70%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    padding: 40px;
+    margin: 40px auto;
+}
+
+.wizard-header {
+    background: transparent;
+    padding: 0;
+    text-align: center;
+    border-bottom: none;
+    margin-bottom: 30px;
+}
+
+.wizard-subtitle {
+    color: var(--degradado);
+}
+
+.wizard-body {
+    padding: 0;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* ------------------- Barra de Progreso ------------------- */
+.progress-container {
+    padding: 0;
+    background: transparent;
+    border-bottom: none;
+    position: relative;
+    height: 8px;
+    margin-bottom: 50px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--guinda);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.step-indicators {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.step-indicators::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+/* ------------------- Pasos e Iconos ------------------- */
+.step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--guinda);
+    border: 2px solid #ced4da;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    cursor: default;
+    /*pointer*/
+}
+
+.step.active {
+    background: var(--azul);
+    border-color: #3498db;
+    color: white;
+    box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+    transform: scale(1.1);
+}
+
+.step.completed {
+    background: #27ae60;
+    border-color: #27ae60;
+    color: white;
+}
+
+.step-label {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 14px;
+    color: var(--degradado);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.step.active .step-label {
+    color: #3498db;
+    font-weight: 600;
+}
+
+/* ------------------- Campos del Wizard ------------------- */
+.section-title {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 14px;
+    background: #f1f3f5;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #adb5bd;
+}
+
+/* ------------------- Botones del Wizard ------------------- */
+.btn-container {
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-prev {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-next {
+    background: #3498db;
+    color: white;
+}
+
+.btn-submit {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-prev:hover {
+    background: #5a6268;
+}
+
+.btn-next:hover {
+    background: #2980b9;
+}
+
+.btn-submit:hover {
+    background: #2ecc71;
+}
+
+/* ------------------- BtnToggle Crecer ------------------- */
+body.collapsed .sidebar {
+    transform: translateX(-100%);
+}
+
+body.collapsed .main-content {
+    margin-left: 0;
+    width: calc(100% - 250px);
+}
+
+body.collapsed .toggle-tab {
+    left: 0;
+}
+
+/* ------------------- Botón deshabilitado ------------------- */
+.right-menu-content button:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.btn-container button:disabled {
+    background-color: var(--gris);
+    color: var(--degradado);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* ------------------- Estilos de impresión ------------------- */
+@media print {
+
+    .notification,
+    .toggle-tab,
+    .sidebar,
+    .right-menu,
+    .btn-container,
+    .proveedores-panel {
+        display: none !important;
+    }
+
+    @page {
+        margin: 1cm;
+    }
+
+    .main-content {
+        transform: scale(0.9);
+        transform-origin: top center;
+        width: 100% !important;
+        margin-left: 0 !important;
+        box-sizing: border-box;
+    }
+}
+
+/* ------------------- Estilos Responsive ------------------- */
+@media (max-width: 1200px) {
+    .page-title {
+        font-size: 1.4rem;
+    }
+
+    .dgic-container {
+        gap: 3rem;
+    }
+
+    .dgic-container p {
+        font-size: 0.8rem;
+    }
+
+    .dgic-container span {
+        width: 40%;
+    }
+
+    .dgic-container img {
+        height: 2.5rem;
+        /* Tamaño fijo de las imágenes para consistencia */
+    }
+
+    .dgic-container .big {
+        height: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        display: block;
+        padding-top: 20px;
+    }
+
+    body.collapsed .sidebar {
+        transform: translateX(-100%);
+    }
+
+    body:not(.collapsed) .sidebar {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .right-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 250px;
+        z-index: 999;
+    }
+
+    .toggle-tab {
+        top: 1%;
+        transform: none;
+    }
+
+    .toggle-tab-btn {
+        width: 20px;
+        height: 20px;
+    }
+
+    .toggle-tab-btn:hover {
+        width: 25px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .user-info {
+        text-align: center;
+        width: 100%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+
+    .dgic-container img {
+        height: 3rem;
+    }
+}
+
+/*
+ * ============================================
+ * Estilos del Modal
+ * ============================================
+ */
+
+/* ------------------- Estilos Generales del Modal ------------------- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    overflow: auto;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 900px;
+    transform: translateY(-20px);
+    animation: slideIn 0.4s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.modal-header h2 {
+    color: var(--guinda);
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.modal-txt {
+    color: var(--azul);
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+/* ------------------- Estilos de la Tabla en el Modal ------------------- */
+#proveedoresTableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#proveedoresTableContainer th,
+#proveedoresTableContainer td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+#proveedoresTableContainer th {
+    background-color: var(--guinda);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* ------------------- Animaciones ------------------- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    to {
+        transform: translateY(0);
+    }
+}
