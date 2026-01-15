@@ -30,7 +30,9 @@ db.sqlite3
 # Archivos subidos por los usuarios
 .env
 # Archivo de Excel
-.xlsx
+~$*
+.xlsx#
+.xls#
 # Carpeta de los datos respalados
 /fixtures/
 
