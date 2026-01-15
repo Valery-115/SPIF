@@ -29,6 +29,10 @@ db.sqlite3
 /media/               
 # Archivos subidos por los usuarios
 .env
+# Archivo de Excel
+.xlsx
+# Carpeta de los datos respalados
+/fixtures/
 
 # --------------------
 # 4. Archivos de Django y SO
