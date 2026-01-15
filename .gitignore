@@ -31,10 +31,10 @@ db.sqlite3
 .env
 # Archivo de Excel
 ~$*
-*.xlsx#
-*.xls#
+*.xlsx
+*.xls
 # Carpeta de los datos respalados
-/fixtures/
+**/fixtures/
 
 # --------------------
 # 4. Archivos de Django y SO
