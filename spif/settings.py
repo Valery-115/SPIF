@@ -10,26 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
+
 import os
+from pathlib import Path
 # Es la función de carga para que el sevidor corra el entorno (.env) sin ver los datos en el código
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# 1. CARGAR las variables antes de usarlas
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
+# 2. CONFIGURAR con lógica correcta
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') .lower() == 'true'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-^q)njzo!8fibelmd!)*s*ke(=3(8$r-2slz4)o&a(+mjw@1nnx'
+# SECRET_KEY = 'django-insecure-^q)njzo!8fibelmd!)*s*ke(=3(8$r-2slz4)o&a(+mjw@1nnx'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'default-key-if-not-found')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') .lower() == 'True'
-
-ALLOWED_HOSTS = ['10.236.62.44', '127.0.0.1']
+ALLOWED_HOSTS = ['10.236.62.44', '127.0.0.1', 'localhost']
 
 CSRF_TRUSTED_ORIGINS = ['http://10.236.62.44']
 
@@ -81,14 +84,11 @@ WSGI_APPLICATION = 'spif.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Llamar a la función para que lea el archivo .env (Servidor)
-load_dotenv()
-
 #BD del Servidor (Asegurarse de que se lean TODAS las Variables de Entorno)
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE'),
-        'NAME': os.environ.get('DB_NAME'),
+        'ENGINE': os.environ.get('DB_ENGINE'),#, 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME'),#, BASE_DIR / 'db.sqlite3'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),

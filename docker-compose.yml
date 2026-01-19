@@ -12,9 +12,9 @@ services:
 
     # 4. CREDENCIALES
     environment:
-      POSTGRES_DB: spif
-      POSTGRES_USER: spif_user
-      POSTGRES_PASSWORD: temporal
+      POSTGRES_DB: ${BD_NAME}
+      POSTGRES_USER: ${BD_USER}
+      POSTGRES_PASSWORD: ${BD_PASSWORD}
 
     # 5. PUERTOS: Mapeo Externo:Interno (el puerto 5435 es el que debe abrir)
     ports:
